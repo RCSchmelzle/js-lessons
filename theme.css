@@ -185,7 +185,7 @@ body > div.has-canvas {
 }
 
 .pane-left {
-  width: 40%;
+  width: 320px;
   min-width: 260px;
   padding: 14px 16px;
   overflow-y: auto;
@@ -248,6 +248,8 @@ body > div.has-canvas {
 
 .concept { font-size: 13px; line-height: 1.65; color: var(--color-text-secondary) }
 .concept strong { color: var(--color-text-primary); font-weight: 600 }
+.concept ul, .concept ol { margin: 4px 0 4px 16px; padding: 0; font-size: 12px; }
+.concept li { margin-bottom: 1px; }
 
 .cr {
   background: var(--color-accent-dim);
