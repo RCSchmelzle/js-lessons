@@ -113,6 +113,19 @@ window.SLIDES = [
     ],
     expected: ["[\"Laptop\",\"Phone\",\"Tablet\"]", "[\"Phone\",\"Tablet\"]", "1000", "[{name:\"Phone\",price:450},{name:\"Tablet\",price:270}]"],
     tryit: "Add a <strong>stock</strong> property to each product. Filter to only in-stock items (stock > 0), then map to names."
+  },
+  {
+    title: "Practice — LeetCode challenges",
+    concept: "Array manipulation is the highest-value interview skill. Practice with these problems — try solving each one twice: once with a plain loop, once with map/filter/find.<ul style='margin:8px 0 0 16px;font-size:13px;line-height:2'><li><a href='https://leetcode.com/problems/running-sum-of-1d-array/' target='_blank' style='color:var(--color-accent)'>Running Sum of 1d Array</a> — array traversal + building results</li><li><a href='https://leetcode.com/problems/concatenation-of-array/' target='_blank' style='color:var(--color-accent)'>Concatenation of Array</a> — array transforms (try with spread)</li><li><a href='https://leetcode.com/problems/shuffle-string/' target='_blank' style='color:var(--color-accent)'>Shuffle String</a> — indexing + reconstruction</li><li><a href='https://leetcode.com/problems/two-sum/' target='_blank' style='color:var(--color-accent)'>Two Sum</a> — the classic interview problem</li><li><a href='https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/' target='_blank' style='color:var(--color-accent)'>Two Sum II</a> — good stretch, still manageable</li></ul>",
+    code: "// Practice: Two Sum concept\n// Given an array and a target, find two numbers that add up to it\n\nlet nums = [2, 7, 11, 15];\nlet target = 9;\n\n// Brute force approach:\nfor (let i = 0; i < nums.length; i++) {\n  for (let j = i + 1; j < nums.length; j++) {\n    if (nums[i] + nums[j] === target) {\n      console.log(\"Found:\", nums[i], \"+\", nums[j], \"=\", target);\n      console.log(\"Indices:\", i, j);\n    }\n  }\n}\n\n// Try: can you solve Running Sum?\nlet input = [1, 2, 3, 4];\nlet result = [];\nlet sum = 0;\nfor (let n of input) {\n  sum += n;\n  result.push(sum);\n}\nconsole.log(\"Running sum:\", result);",
+    lines: [
+      ["nested for loops", "check every pair of numbers"],
+      ["nums[i] + nums[j] === target", "do they add up to the target?"],
+      ["i + 1", "start j after i to avoid checking the same pair twice"],
+      ["running sum", "each element is the sum of all elements before it (inclusive)"]
+    ],
+    expected: ["Found: 2 + 7 = 9", "Indices: 0 1", "Running sum: [1,3,6,10]"],
+    tryit: "Try solving these on LeetCode in JavaScript. Start with Running Sum, then Two Sum. For extra practice, solve Running Sum using <strong>.map()</strong> instead of a loop."
   }
 ];
 </script>

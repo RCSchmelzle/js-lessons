@@ -105,6 +105,19 @@ window.SLIDES = [
     ],
     expected: ["Alice logged in (1 times)", "Alice logged in (2 times)", "Bob logged in (1 times)", "{user:\"Alice\",logins:2}", "{user:\"Bob\",logins:1}"],
     tryit: "Add a <strong>logout()</strong> method and a <strong>loggedIn</strong> boolean state. Login sets it to true, logout sets it to false."
+  },
+  {
+    title: "Practice — scope, closures, this",
+    concept: "These are language-model topics, not algorithm topics. LeetCode won't help here. Instead, practice by doing these exercises:<ol style='margin:8px 0 0 16px;font-size:13px;line-height:2'><li>Write a createCounter() closure from scratch</li><li>Write an object with a method that uses <span class='cr'>this</span></li><li>Rewrite that method as an arrow function — explain why it breaks</li><li>Write a factory function with private state</li><li>Explain, out loud, what a closure is</li></ol>",
+    code: "// Exercise 1: createCounter from scratch\nfunction createCounter(start) {\n  let count = start || 0;\n  return {\n    increment() { count++; return count; },\n    decrement() { count--; return count; },\n    getCount() { return count; }\n  };\n}\n\nlet c = createCounter(10);\nconsole.log(c.increment());\nconsole.log(c.increment());\nconsole.log(c.decrement());\nconsole.log(\"Count:\", c.getCount());\n\n// Exercise 2: this in an object\nlet calculator = {\n  value: 0,\n  add(n) { this.value += n; return this; },\n  result() { console.log(\"Result:\", this.value); }\n};\n\ncalculator.add(5).add(3).result();",
+    lines: [
+      ["createCounter(start)", "closure: count is private, methods share access"],
+      ["return { increment, decrement, getCount }", "public interface only"],
+      ["this.value", "inside object method, this = calculator"],
+      [".add(5).add(3).result()", "method chaining — each method returns this"]
+    ],
+    expected: ["11", "12", "11", "Count: 11", "Result: 8"],
+    tryit: "Clear the code and rewrite both exercises from memory. If you can, you understand closures and this."
   }
 ];
 </script>

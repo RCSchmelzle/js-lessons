@@ -112,6 +112,21 @@ window.SLIDES = [
     ],
     expected: ["To-do app ready! Type a task and click Add."],
     tryit: "Click Run, then type tasks and add them. Click a task to mark it done. Double-click to delete. This is a <strong>real working app</strong>!"
+  },
+  {
+    title: "Practice — build from memory",
+    canvasHTML: '<h3 id="title">Practice Area</h3>\n<p id="text">Modify me with JavaScript!</p>\n<ul id="list"></ul>\n<button id="addBtn">Add Item</button>',
+    concept: "LeetCode won't help you here — DOM skills come from building. Try these exercises without looking at previous slides:<ol style='margin:8px 0 0 16px;font-size:13px;line-height:2'><li>Select an element and change its text</li><li>Toggle a class on click</li><li>Create and append a new element</li><li>Remove an element</li><li>Build a button that adds list items + a button that removes the first one</li></ol><br>If you can do all 5 from memory, you have solid DOM skills.",
+    code: "// Practice: use the canvas elements above\n// Try each exercise without looking back!\n\n// 1. Change the heading text\nconst title = document.querySelector(\"#title\");\ntitle.innerText = \"I changed this!\";\nconsole.log(\"1. Changed heading\");\n\n// 2. Add a click handler to the button\nconst addBtn = document.querySelector(\"#addBtn\");\nconst list = document.querySelector(\"#list\");\n\naddBtn.addEventListener(\"click\", () => {\n  const li = document.createElement(\"li\");\n  li.innerText = \"Item \" + (list.children.length + 1);\n  list.appendChild(li);\n  console.log(\"Added item\", list.children.length);\n});\n\nconsole.log(\"2. Button ready — click it!\");",
+    lines: [
+      ["querySelector(\"#title\")", "select by ID"],
+      [".innerText = \"...\"", "change visible text"],
+      ["createElement(\"li\")", "create new element"],
+      ["appendChild(li)", "add it to the list"],
+      ["addEventListener", "respond to user clicks"]
+    ],
+    expected: ["1. Changed heading", "2. Button ready — click it!"],
+    tryit: "Clear the code and try rebuilding each exercise from scratch. The goal is to write DOM code without looking at examples."
   }
 ];
 </script>

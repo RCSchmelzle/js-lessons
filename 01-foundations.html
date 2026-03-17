@@ -147,6 +147,19 @@ window.SLIDES = [
     ],
     expected: ["Alice is an adult", "Bob is a minor", "Carl is an adult"],
     tryit: "Add a <strong>city</strong> property to Person and print it alongside the adult/minor message."
+  },
+  {
+    title: "Practice — LeetCode challenges",
+    concept: "You now have all the building blocks: variables, types, functions, conditionals, loops, arrays, objects. Solidify your skills with these LeetCode problems (all easy):<ul style='margin:8px 0 0 16px;font-size:13px;line-height:2'><li><a href='https://leetcode.com/problems/add-two-integers/' target='_blank' style='color:var(--color-accent)'>Add Two Integers</a> — basic function + return</li><li><a href='https://leetcode.com/problems/fizz-buzz/' target='_blank' style='color:var(--color-accent)'>Fizz Buzz</a> — loops + conditionals (classic interview warm-up)</li><li><a href='https://leetcode.com/problems/number-of-steps-to-reduce-a-number-to-zero/' target='_blank' style='color:var(--color-accent)'>Number of Steps to Reduce a Number to Zero</a> — while loop + state updates</li><li><a href='https://leetcode.com/problems/merge-strings-alternately/' target='_blank' style='color:var(--color-accent)'>Merge Strings Alternately</a> — string indexing + loops</li></ul>",
+    code: "// Warm-up: Fizz Buzz\n// For numbers 1-20:\n// - divisible by 3: print \"Fizz\"\n// - divisible by 5: print \"Buzz\"\n// - divisible by both: print \"FizzBuzz\"\n// - otherwise: print the number\n\nfor (let i = 1; i <= 20; i++) {\n  if (i % 15 === 0) {\n    console.log(\"FizzBuzz\");\n  } else if (i % 3 === 0) {\n    console.log(\"Fizz\");\n  } else if (i % 5 === 0) {\n    console.log(\"Buzz\");\n  } else {\n    console.log(i);\n  }\n}",
+    lines: [
+      ["i % 15 === 0", "check divisible by both 3 and 5 first"],
+      ["i % 3 === 0", "then check divisible by 3"],
+      ["i % 5 === 0", "then check divisible by 5"],
+      ["% (modulo)", "remainder operator — if remainder is 0, it divides evenly"]
+    ],
+    expected: ["1","2","Fizz","4","Buzz","Fizz","7","8","Fizz","Buzz","11","Fizz","13","14","FizzBuzz","16","17","Fizz","19","Buzz"],
+    tryit: "Try the LeetCode problems above. Start with Add Two Integers, then Fizz Buzz. Solve each one in the LeetCode editor using JavaScript."
   }
 ];
 </script>
