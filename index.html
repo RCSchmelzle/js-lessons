@@ -19,9 +19,12 @@
 </head>
 <body>
 <div>
-  <div style="padding: 28px 22px 12px; border-bottom: 1px solid var(--color-border-secondary);">
-    <h1 style="font-size: 22px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 6px;">JavaScript Crash Course</h1>
-    <p style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.6;">Interactive lessons with built-in code editors. Click any lesson to start. No installs needed — everything runs in the browser.</p>
+  <div style="padding: 28px 22px 12px; border-bottom: 1px solid var(--color-border-secondary); display: flex; align-items: flex-start; gap: 12px;">
+    <div style="flex:1">
+      <h1 style="font-size: 22px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 6px;">JavaScript Crash Course</h1>
+      <p style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.6;">Interactive lessons with built-in code editors. Click any lesson to start. No installs needed — everything runs in the browser.</p>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" id="themeBtn">&#9790;</button>
   </div>
 
   <div style="background: var(--color-accent-dim); border-left: 3px solid var(--color-accent); border-radius: 8px; padding: 12px 16px; margin: 0 22px; font-size: 13px; line-height: 1.7;">
@@ -142,5 +145,19 @@
     Arrow keys navigate slides. Tab inserts spaces. Ctrl+Enter runs code. Lessons 3, 5 &amp; 8 have live preview canvases.
   </div>
 </div>
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const next = html.getAttribute("data-theme") === "light" ? "dark" : "light";
+  html.setAttribute("data-theme", next);
+  localStorage.setItem("theme", next);
+  document.getElementById("themeBtn").innerHTML = next === "light" ? "&#9788;" : "&#9790;";
+}
+(function() {
+  const saved = localStorage.getItem("theme");
+  if (saved) document.documentElement.setAttribute("data-theme", saved);
+  if (saved === "light") document.getElementById("themeBtn").innerHTML = "&#9788;";
+})();
+</script>
 </body>
 </html>

@@ -3,6 +3,23 @@
 
 let cSlide = 0;
 
+// Theme toggle
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute("data-theme");
+  const next = current === "light" ? "dark" : "light";
+  html.setAttribute("data-theme", next);
+  localStorage.setItem("theme", next);
+  const btn = document.querySelector(".theme-toggle");
+  if (btn) btn.innerHTML = next === "light" ? "&#9788;" : "&#9790;";
+}
+
+// Apply saved theme on load
+(function() {
+  const saved = localStorage.getItem("theme");
+  if (saved) document.documentElement.setAttribute("data-theme", saved);
+})();
+
 function buildLayout() {
   const info = window.LESSON_INFO || {};
   const hasCanvas = window.HAS_CANVAS || false;
@@ -40,7 +57,7 @@ function buildLayout() {
         <span class="lesson-num">${info.num || ''}</span>
         <span class="lesson-name">${info.name || ''}</span>
       </div>
-      <span style="width:34px"></span>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">&#9790;</button>
     </div>
     <div class="nav-bar">
       <button class="nav-btn" id="prevBtn" onclick="navigate(-1)">&larr; prev</button>
@@ -303,3 +320,10 @@ async function runCode() {
 // Init
 buildLayout();
 render();
+
+// Set correct theme icon after layout is built
+(function() {
+  const saved = localStorage.getItem("theme");
+  const btn = document.querySelector(".theme-toggle");
+  if (btn && saved === "light") btn.innerHTML = "&#9788;";
+})();
