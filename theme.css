@@ -72,19 +72,73 @@ body > div.has-canvas {
   font-size: 18px;
   padding: 2px 8px;
   border-radius: 6px;
+  border: none;
+  background: none;
+  cursor: pointer;
   transition: background 0.15s;
 }
 
 .home-btn:hover { background: var(--color-accent-dim); color: var(--color-accent); }
 
-.next-link {
-  color: var(--color-accent);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
+/* ─── Menu dropdown ─── */
+.menu-wrapper { position: relative; }
+
+.menu-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 6px;
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  min-width: 220px;
+  z-index: 100;
+  padding: 4px 0;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
-.next-link:hover { text-decoration: underline; }
+.menu-dropdown.open { display: block; }
+
+.menu-item {
+  display: block;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  transition: background 0.1s;
+}
+
+.menu-item:hover { background: var(--color-accent-dim); }
+.menu-item.active { color: var(--color-accent); background: var(--color-accent-dim); }
+
+.menu-item.menu-home {
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.menu-divider {
+  height: 1px;
+  background: var(--color-border-secondary);
+  margin: 4px 0;
+}
+
+/* ─── Centered lesson title ─── */
+.lesson-bar {
+  position: relative;
+}
+
+.lesson-bar-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
 .lesson-bar .lesson-num {
   font-size: 11px;
@@ -113,10 +167,10 @@ body > div.has-canvas {
 
 /* ─── DOM Canvas as side pane ─── */
 .canvas-pane {
-  width: 280px;
-  min-width: 220px;
+  width: 40%;
+  min-width: 280px;
   padding: 14px;
-  border-right: 1px solid var(--color-border-secondary);
+  border-left: 1px solid var(--color-border-secondary);
   background: rgba(0,0,0,0.1);
   overflow-y: auto;
   flex-shrink: 0;
@@ -131,7 +185,7 @@ body > div.has-canvas {
 }
 
 .pane-left {
-  width: 340px;
+  width: 40%;
   min-width: 260px;
   padding: 14px 16px;
   overflow-y: auto;
@@ -156,7 +210,7 @@ body > div.has-canvas {
 
 @media(max-width: 768px) {
   .main-area { flex-direction: column; }
-  .canvas-pane { width: 100%; min-width: 0; border-right: none; border-bottom: 1px solid var(--color-border-secondary); }
+  .canvas-pane { width: 100%; min-width: 0; border-left: none; border-top: 1px solid var(--color-border-secondary); }
   .split-pane { flex-direction: column; }
   .pane-left { width: 100%; min-width: 0; border-right: none; border-bottom: 1px solid var(--color-border-secondary); }
 }
@@ -215,7 +269,7 @@ body > div.has-canvas {
   flex-direction: column;
 }
 
-.editor-panel { flex-shrink: 0; }
+.editor-panel { flex: 1; min-height: 0; }
 
 .panel-head {
   display: flex;
@@ -261,8 +315,9 @@ textarea.code {
   background: rgba(0,0,0,0.2);
   border: none;
   color: var(--color-text-primary);
-  resize: vertical;
-  min-height: 220px;
+  resize: none;
+  flex: 1;
+  min-height: 0;
   outline: none;
   tab-size: 2;
 }
@@ -511,6 +566,10 @@ textarea.code::selection { background: rgba(129,140,248,0.3) }
   flex-direction: column;
   gap: 4px;
   padding: 8px 12px;
+  max-height: 200px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-secondary) transparent;
 }
 
 .cheatsheet-col code {
@@ -539,8 +598,8 @@ textarea.code::selection { background: rgba(129,140,248,0.3) }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 16px;
-  border-top: 1px solid var(--color-border-secondary);
+  padding: 6px 16px;
+  border-bottom: 1px solid var(--color-border-secondary);
   background: var(--color-background-secondary);
   flex-shrink: 0;
 }
@@ -589,7 +648,7 @@ textarea.code::selection { background: rgba(129,140,248,0.3) }
 }
 
 .dom-canvas::before {
-  content: "LIVE PREVIEW";
+  content: "WEBPAGE PREVIEW";
   position: absolute;
   top: 0;
   left: 12px;

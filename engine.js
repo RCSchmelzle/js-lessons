@@ -9,17 +9,45 @@ function buildLayout() {
 
   const container = document.querySelector("body > div");
   container.className = hasCanvas ? "has-canvas" : "";
+  const lessons = [
+    { file: "01-foundations.html", label: "1 — Foundations" },
+    { file: "02-data.html", label: "2 — Working with Data" },
+    { file: "03-dom.html", label: "3 — DOM & Interaction" },
+    { file: "04-how-apps-work.html", label: "4 — How Apps Work" },
+    { file: "05-events-forms.html", label: "5 — Events & Forms" },
+    { file: "06-async-apis.html", label: "6 — Async & APIs" },
+    { file: "07-scope-closures.html", label: "7 — Scope & Closures" },
+    { file: "08-bootstrap.html", label: "8 — Bootstrap" },
+    { file: "00-setup.html", label: "Setup Guide" },
+    { file: "09-debugging.html", label: "Debugging" },
+  ];
+  const currentFile = location.pathname.split("/").pop();
+  const lessonLinks = lessons.map(l =>
+    `<a class="menu-item${l.file === currentFile ? ' active' : ''}" href="${l.file}">${l.label}</a>`
+  ).join("");
+
   container.innerHTML = `
     <div class="lesson-bar">
-      <a class="home-btn" href="index.html">&#9776;</a>
-      <div style="display:flex;align-items:center;gap:8px">
+      <div class="menu-wrapper">
+        <button class="home-btn" onclick="document.querySelector('.menu-dropdown').classList.toggle('open')">&#9776;</button>
+        <div class="menu-dropdown">
+          <a class="menu-item menu-home" href="index.html">Home</a>
+          <div class="menu-divider"></div>
+          ${lessonLinks}
+        </div>
+      </div>
+      <div class="lesson-bar-title">
         <span class="lesson-num">${info.num || ''}</span>
         <span class="lesson-name">${info.name || ''}</span>
       </div>
-      ${info.next ? `<a class="next-link" href="${info.next}">next &rarr;</a>` : '<span></span>'}
+      <span style="width:34px"></span>
+    </div>
+    <div class="nav-bar">
+      <button class="nav-btn" id="prevBtn" onclick="navigate(-1)">&larr; prev</button>
+      <div class="dots" id="dots"></div>
+      <button class="nav-btn" id="nextBtn" onclick="navigate(1)">next &rarr;</button>
     </div>
     <div class="main-area">
-      ${hasCanvas ? '<div class="canvas-pane"><div class="dom-canvas" id="canvas"></div></div>' : ''}
       <div class="split-pane">
         <div class="pane-left" id="pane-left">
           <div class="pane-section">
@@ -100,11 +128,7 @@ function buildLayout() {
           </div>
         </div>
       </div>
-    </div>
-    <div class="nav-bar">
-      <button class="nav-btn" id="prevBtn" onclick="navigate(-1)">&larr; prev</button>
-      <div class="dots" id="dots"></div>
-      <button class="nav-btn" id="nextBtn" onclick="navigate(1)">next &rarr;</button>
+      ${hasCanvas ? '<div class="canvas-pane"><div class="dom-canvas" id="canvas"></div></div>' : ''}
     </div>
   `;
 
@@ -119,6 +143,15 @@ function buildLayout() {
     if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
       runCode();
+    }
+  });
+
+  // Close menu on outside click
+  document.addEventListener("click", e => {
+    const menu = document.querySelector(".menu-dropdown");
+    const btn = document.querySelector(".home-btn");
+    if (menu && !menu.contains(e.target) && e.target !== btn) {
+      menu.classList.remove("open");
     }
   });
 
