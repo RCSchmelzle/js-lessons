@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JavaScript Crash Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css" />
+<style>
+  body > div { height: auto; max-width: 960px; border-radius: var(--border-radius-lg); overflow: auto; }
+  body { padding: 24px 16px 48px; }
+  .section-label {
+    font-size: 11px; font-weight: 700; color: var(--color-text-secondary);
+    text-transform: uppercase; letter-spacing: 0.06em; padding: 16px 22px 6px;
+    font-family: var(--font-mono);
+  }
+</style>
+</head>
+<body>
+<div>
+  <div style="padding: 28px 22px 12px; border-bottom: 1px solid var(--color-border-secondary);">
+    <h1 style="font-size: 22px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 6px;">JavaScript Crash Course</h1>
+    <p style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.6;">Interactive lessons with built-in code editors. Click any lesson to start. No installs needed — everything runs in the browser.</p>
+  </div>
+
+  <div class="section-label">Core Lessons</div>
+  <div class="index-grid">
+    <a class="index-card" href="01-foundations.html">
+      <div class="card-num">Lesson 1</div>
+      <div class="card-title">Foundations</div>
+      <div class="card-desc">Variables, data types, arrays, objects, classes, functions, conditionals, loops.</div>
+    </a>
+    <a class="index-card" href="02-data.html">
+      <div class="card-num">Lesson 2</div>
+      <div class="card-title">Working with Data</div>
+      <div class="card-desc">.forEach(), .map(), .filter(), .find(), destructuring, spread operator.</div>
+    </a>
+    <a class="index-card" href="03-dom.html">
+      <div class="card-num">Lesson 3</div>
+      <div class="card-title">DOM & Interaction</div>
+      <div class="card-desc">querySelector, innerText, classList, createElement, events. Live DOM canvas.</div>
+    </a>
+    <a class="index-card" href="04-how-apps-work.html">
+      <div class="card-num">Lesson 4</div>
+      <div class="card-title">How Apps Work</div>
+      <div class="card-desc">Event-Logic-UI pattern, state, debugging the flow. The mental model.</div>
+    </a>
+    <a class="index-card" href="05-events-forms.html">
+      <div class="card-num">Lesson 5</div>
+      <div class="card-title">Events & Forms</div>
+      <div class="card-desc">Input handling, Enter key, delete buttons, toggle complete. Live DOM canvas.</div>
+    </a>
+    <a class="index-card" href="06-async-apis.html">
+      <div class="card-num">Lesson 6</div>
+      <div class="card-title">Async & APIs</div>
+      <div class="card-desc">setTimeout, JSON, fetch, async/await, try/catch, loading states.</div>
+    </a>
+    <a class="index-card" href="07-scope-closures.html">
+      <div class="card-num">Lesson 7</div>
+      <div class="card-title">Scope & Closures</div>
+      <div class="card-desc">Scope, block scope, closures, this, arrow functions, factory functions.</div>
+    </a>
+    <a class="index-card" href="08-bootstrap.html">
+      <div class="card-num">Lesson 8</div>
+      <div class="card-title">Bootstrap</div>
+      <div class="card-desc">Adding Bootstrap, containers, spacing, buttons, inputs, lists, grid layout.</div>
+    </a>
+  </div>
+
+  <div class="section-label">Setup & Reference</div>
+  <div class="index-grid">
+    <a class="index-card" href="00-setup.html">
+      <div class="card-num">Setup Guide</div>
+      <div class="card-title">Local Development Setup</div>
+      <div class="card-desc">Install VS Code, Chrome, Live Server. Only needed if running code on your own computer.</div>
+    </a>
+    <a class="index-card" href="09-debugging.html">
+      <div class="card-num">Reference</div>
+      <div class="card-title">Debugging</div>
+      <div class="card-desc">The debugging mindset, tracing flow, common bugs, the golden rule checklist.</div>
+    </a>
+  </div>
+
+  <div style="padding: 16px 22px; border-top: 1px solid var(--color-border-secondary); font-size: 12px; color: var(--color-text-secondary);">
+    Arrow keys navigate slides. Tab inserts spaces. Ctrl+Enter runs code. Lessons 3 &amp; 5 have live DOM canvases.
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lesson 4 — How Apps Work</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css" />
+</head>
+<body>
+<div></div>
+<script>
+window.LESSON_INFO = { num: "Lesson 4", name: "How Apps Work", prev: "03-dom.html", next: "05-events-forms.html" };
+window.SLIDES = [
+  {
+    title: "The big picture — apps wait and react",
+    concept: "A web app is <strong>NOT</strong> a script that runs once. It's a system that <strong>waits and reacts</strong>. Your code sets up listeners, then sits idle until the user does something.",
+    code: "// WRONG mental model — runs once and done:\nconsole.log(\"This runs once\");\n\n// RIGHT mental model — waits for user:\nlet clickCount = 0;\n\nfunction handleClick() {\n  clickCount++;\n  console.log(\"Clicked \" + clickCount + \" times\");\n}\n\n// Simulate user clicking 3 times\nhandleClick();\nhandleClick();\nhandleClick();\n\nconsole.log(\"App is still alive, waiting for more...\");",
+    lines: [
+      ["runs once", "traditional scripts just execute and exit"],
+      ["handleClick()", "in a real app, this runs when the user clicks"],
+      ["clickCount", "state that persists between interactions"],
+      ["still alive", "the app keeps running, waiting for the next event"]
+    ],
+    expected: ["This runs once", "Clicked 1 times", "Clicked 2 times", "Clicked 3 times", "App is still alive, waiting for more..."],
+    tryit: "Add a <strong>handleReset()</strong> function that sets clickCount back to 0. Call it after the 3 clicks, then click again."
+  },
+  {
+    title: "The 5-part model of every web app",
+    concept: "Every web app follows this pattern: <strong>1) HTML exists</strong>, <strong>2) JS connects to it</strong>, <strong>3) waits for events</strong>, <strong>4) updates data</strong>, <strong>5) updates UI</strong>. This is the universal flow.",
+    code: "// Simulating the 5-part model:\n\n// 1. HTML exists (structure)\nlet page = { button: \"Click me\", display: \"0\" };\nconsole.log(\"1. Page loaded:\", page.display);\n\n// 2. JS connects to DOM\nlet count = 0; // our state\nconsole.log(\"2. JS connected, count =\", count);\n\n// 3. Wait for event (simulated clicks)\nfunction onClick() {\n  // 4. Update data (state)\n  count++;\n  console.log(\"4. State updated: count =\", count);\n\n  // 5. Update UI\n  page.display = String(count);\n  console.log(\"5. UI updated:\", page.display);\n}\n\nconsole.log(\"3. Waiting for events...\");\nonClick();\nonClick();",
+    lines: [
+      ["page = {...}", "step 1: HTML provides structure"],
+      ["count = 0", "step 2: JS sets up initial state"],
+      ["function onClick()", "step 3: defines what happens on event"],
+      ["count++", "step 4: update the data"],
+      ["page.display = String(count)", "step 5: update what the user sees"]
+    ],
+    expected: ["1. Page loaded: 0", "2. JS connected, count = 0", "3. Waiting for events...", "4. State updated: count = 1", "5. UI updated: 1", "4. State updated: count = 2", "5. UI updated: 2"],
+    tryit: "Add a <strong>decrement button</strong> handler. Make sure count never goes below 0."
+  },
+  {
+    title: "Event → Logic → UI",
+    concept: "The simplified mental model: <strong>Event</strong> (user does something) → <strong>Logic</strong> (code processes it) → <strong>UI</strong> (page updates). Every feature you build follows this exact flow.",
+    code: "// A complete counter following Event → Logic → UI\n\nlet state = { count: 0 };\nlet ui = { text: \"Count: 0\" };\n\nfunction render() {\n  ui.text = \"Count: \" + state.count;\n  console.log(\"[UI]\", ui.text);\n}\n\nfunction increment() {\n  console.log(\"[Event] increment clicked\");\n  state.count++;           // Logic\n  render();                // UI\n}\n\nfunction decrement() {\n  console.log(\"[Event] decrement clicked\");\n  if (state.count > 0) state.count--;  // Logic\n  render();                             // UI\n}\n\nincrement();\nincrement();\nincrement();\ndecrement();",
+    lines: [
+      ["[Event]", "something happened — user clicked"],
+      ["state.count++", "Logic — update the data"],
+      ["render()", "UI — sync the display with the data"],
+      ["if (state.count > 0)", "Logic can include validation/guards"]
+    ],
+    expected: ["[Event] increment clicked", "[UI] Count: 1", "[Event] increment clicked", "[UI] Count: 2", "[Event] increment clicked", "[UI] Count: 3", "[Event] decrement clicked", "[UI] Count: 2"],
+    tryit: "Add a <strong>reset()</strong> function. Then add a <strong>double()</strong> that multiplies count by 2."
+  },
+  {
+    title: "What is state?",
+    concept: "<strong>State</strong> = the data your app is currently using. It connects user actions to what they see. When state changes, the UI should update to match.",
+    code: "// State is just data that changes over time\nlet appState = {\n  todos: [],\n  filter: \"all\" // \"all\", \"active\", \"done\"\n};\n\n// Actions update state\nfunction addTodo(text) {\n  appState.todos.push({ text, done: false });\n}\n\nfunction toggleTodo(index) {\n  appState.todos[index].done = !appState.todos[index].done;\n}\n\n// UI reads from state\nfunction getVisible() {\n  if (appState.filter === \"active\")\n    return appState.todos.filter(t => !t.done);\n  if (appState.filter === \"done\")\n    return appState.todos.filter(t => t.done);\n  return appState.todos;\n}\n\naddTodo(\"Buy groceries\");\naddTodo(\"Walk the dog\");\ntoggleTodo(0);\n\nappState.filter = \"active\";\nconsole.log(\"Active:\", getVisible().map(t => t.text));\n\nappState.filter = \"done\";\nconsole.log(\"Done:\", getVisible().map(t => t.text));\n\nappState.filter = \"all\";\nconsole.log(\"All:\", getVisible().map(t => t.text + (t.done ? \" ✓\" : \"\")));",
+    lines: [
+      ["appState", "all app data lives in one place"],
+      ["addTodo()", "action that changes state"],
+      ["toggleTodo()", "another action — flips done boolean"],
+      ["getVisible()", "reads state to decide what to show"],
+      ["appState.filter", "changing filter changes what getVisible returns"]
+    ],
+    expected: ["Active: [\"Walk the dog\"]", "Done: [\"Buy groceries\"]", "All: [\"Buy groceries ✓\",\"Walk the dog\"]"],
+    tryit: "Add a <strong>setFilter(f)</strong> function and a <strong>removeTodo(index)</strong> function."
+  },
+  {
+    title: "Debugging the flow",
+    concept: "When something breaks, check each step of the flow: <strong>1) Did the event fire?</strong> <strong>2) Did the data update?</strong> <strong>3) Did the UI update?</strong> The bug is always in one of these steps.",
+    code: "let state = { count: 0 };\n\nfunction buggyIncrement() {\n  // Step 1: Did the event fire?\n  console.log(\"1. Event fired\");\n\n  // Step 2: Did the data update?\n  state.count++;\n  console.log(\"2. State:\", state.count);\n\n  // Step 3: Did the UI update?\n  // BUG: forgot to update UI!\n  // console.log(\"3. UI updated\");\n}\n\nfunction fixedIncrement() {\n  console.log(\"1. Event fired\");\n  state.count++;\n  console.log(\"2. State:\", state.count);\n  let display = \"Count: \" + state.count;\n  console.log(\"3. UI:\", display);\n}\n\nconsole.log(\"--- Buggy version ---\");\nbuggyIncrement();\n\nconsole.log(\"--- Fixed version ---\");\nfixedIncrement();",
+    lines: [
+      ["console.log(\"1. Event fired\")", "confirm the handler is running"],
+      ["console.log(\"2. State:\", ...)", "confirm the data changed correctly"],
+      ["console.log(\"3. UI:\", ...)", "confirm the display updated"],
+      ["BUG: forgot to update UI", "the most common bug — state changes but UI doesn't"]
+    ],
+    expected: ["--- Buggy version ---", "1. Event fired", "2. State: 1", "--- Fixed version ---", "1. Event fired", "2. State: 2", "3. UI: Count: 2"],
+    tryit: "Create a function with a <strong>different bug</strong> (e.g., event fires but state doesn't update). Debug it step by step."
+  },
+  {
+    title: "The full picture — preview of everything ahead",
+    concept: "Now you have the mental model. Everything from Day 4 onward fills in this framework: <strong>Events+Forms</strong> (richer events), <strong>APIs</strong> (external data), <strong>Scope+Closures</strong> (how JS manages memory). You already understand the system.",
+    code: "// The complete app pattern you'll use for everything:\n\n// STATE\nlet state = { items: [], input: \"\" };\n\n// ACTIONS (update state)\nfunction addItem(text) {\n  if (!text.trim()) return;\n  state.items.push(text);\n  state.input = \"\";\n}\n\nfunction removeItem(index) {\n  state.items.splice(index, 1);\n}\n\n// RENDER (state → UI)\nfunction render() {\n  if (state.items.length === 0) {\n    console.log(\"[UI] No items yet\");\n  } else {\n    state.items.forEach((item, i) => {\n      console.log(\"[UI] \" + i + \": \" + item);\n    });\n  }\n  console.log(\"---\");\n}\n\n// SIMULATE USER FLOW\nrender();\naddItem(\"Learn JavaScript\");\nrender();\naddItem(\"Build a project\");\naddItem(\"Ship it\");\nrender();\nremoveItem(1);\nrender();",
+    lines: [
+      ["state", "all data in one place"],
+      ["addItem / removeItem", "actions that modify state"],
+      ["render()", "reads state and updates display"],
+      ["simulate user flow", "in a real app, these are triggered by events"],
+      ["the pattern", "State → Actions → Render — this is every app"]
+    ],
+    expected: ["[UI] No items yet", "---", "[UI] 0: Learn JavaScript", "---", "[UI] 0: Learn JavaScript", "[UI] 1: Build a project", "[UI] 2: Ship it", "---", "[UI] 0: Learn JavaScript", "[UI] 1: Ship it", "---"],
+    tryit: "Add an <strong>editItem(index, newText)</strong> function. Then add a <strong>clearAll()</strong>. Render after each to verify."
+  }
+];
+</script>
+<script src="engine.js"></script>
+</body>
+</html>

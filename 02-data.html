@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lesson 2 — Working with Data</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css" />
+</head>
+<body>
+<div></div>
+<script>
+window.LESSON_INFO = { num: "Lesson 2", name: "Working with Data", prev: "01-foundations.html", next: "03-dom.html" };
+window.SLIDES = [
+  {
+    title: ".forEach() — cleaner looping",
+    concept: "<span class='cr'>.forEach()</span> runs a function once per array item. The arrow function (<span class='cr'>=></span>) is modern JS shorthand — you'll see it everywhere. Both styles do the same thing.",
+    code: "let users = [\n  { name: \"Alice\", age: 23 },\n  { name: \"Bob\", age: 17 }\n];\n\nusers.forEach(user => {\n  console.log(user.name + \" — \" + user.age);\n});",
+    lines: [
+      ["users.forEach(...)", "call forEach on the array"],
+      ["user => { ... }", "arrow function: 'user' is each item in turn"],
+      ["user.name + \" — \" + user.age", "access both properties from the current item"]
+    ],
+    expected: ["Alice — 23", "Bob — 17"],
+    tryit: "Add a third user. Print each user's name in uppercase using <strong>.toUpperCase()</strong>."
+  },
+  {
+    title: ".map() — transform into a new array",
+    concept: "<span class='cr'>.map()</span> creates a <strong>new array</strong> by running a function on each item and collecting the results. The original array is never changed.",
+    code: "let users = [\n  { name: \"Alice\", age: 23 },\n  { name: \"Bob\", age: 17 },\n  { name: \"Carl\", age: 30 }\n];\n\nlet names = users.map(user => user.name);\nlet ages  = users.map(user => user.age);\nlet upper = users.map(user => user.name.toUpperCase());\n\nconsole.log(names);\nconsole.log(ages);\nconsole.log(upper);",
+    lines: [
+      ["users.map(user => user.name)", "for each user, return just the name"],
+      ["users.map(user => user.age)", "for each user, return just the age"],
+      ["user.name.toUpperCase()", "string method: converts text to ALL CAPS"]
+    ],
+    expected: ["[\"Alice\",\"Bob\",\"Carl\"]", "[23,17,30]", "[\"ALICE\",\"BOB\",\"CARL\"]"],
+    tryit: "Map the users to an array of strings like <strong>\"Alice is 23\"</strong>."
+  },
+  {
+    title: ".filter() — select matching items",
+    concept: "<span class='cr'>.filter()</span> returns a new array containing only the items where the function returns <span class='cr'>true</span>. Items returning <span class='cr'>false</span> are left out.",
+    code: "let users = [\n  { name: \"Alice\", age: 23 },\n  { name: \"Bob\", age: 17 },\n  { name: \"Carl\", age: 30 }\n];\n\nlet adults = users.filter(user => user.age >= 18);\nlet minors = users.filter(user => user.age < 18);\n\nconsole.log(\"Adults:\", adults.length);\nconsole.log(\"Minors:\", minors.length);\nconsole.log(adults.map(u => u.name));",
+    lines: [
+      ["user.age >= 18", "condition: only keep users 18 or older"],
+      ["user.age < 18", "condition: only keep users under 18"],
+      ["adults.length", "how many items passed the filter"],
+      ["adults.map(u => u.name)", "chain map onto the filtered result"]
+    ],
+    expected: ["Adults: 2", "Minors: 1", "[\"Alice\",\"Carl\"]"],
+    tryit: "Filter users whose name starts with \"A\" using <strong>user.name.startsWith(\"A\")</strong>."
+  },
+  {
+    title: ".find() — get one matching item",
+    concept: "<span class='cr'>.find()</span> returns the <strong>first item</strong> that matches — a single object, not an array. Returns <span class='cr'>undefined</span> if nothing matches.",
+    code: "let users = [\n  { name: \"Alice\", age: 23 },\n  { name: \"Bob\", age: 17 },\n  { name: \"Carl\", age: 30 }\n];\n\nlet alice = users.find(u => u.name === \"Alice\");\nlet oldest = users.find(u => u.age === 30);\nlet nobody = users.find(u => u.name === \"Zara\");\n\nconsole.log(alice);\nconsole.log(oldest.name);\nconsole.log(nobody);",
+    lines: [
+      ["users.find(u => u.name === \"Alice\")", "return the first user named Alice"],
+      ["=== (triple equals)", "strict equality — checks value AND type"],
+      ["users.find(u => u.age === 30)", "find by age — returns Carl's object"],
+      ["nobody", "no match found — returns undefined"]
+    ],
+    expected: ["{name:\"Alice\",age:23}", "Carl", "undefined"],
+    tryit: "Find the user whose age is 17. Then try finding a name that doesn't exist and observe the result."
+  },
+  {
+    title: "Destructuring — pull values out cleanly",
+    concept: "Destructuring lets you extract object properties into named variables in one line. You'll see this pattern in nearly every modern JS file.",
+    code: "let user = { name: \"Alice\", age: 23, city: \"Raleigh\" };\n\n// old way:\nlet n1 = user.name;\n\n// destructuring:\nlet { name, age, city } = user;\n\nconsole.log(name);\nconsole.log(age);\nconsole.log(city);\n\n// also works in function params:\nfunction greet({ name, age }) {\n  return name + \" is \" + age;\n}\nconsole.log(greet(user));",
+    lines: [
+      ["let { name, age, city } = user", "extract 3 properties into 3 variables at once"],
+      ["name", "now a standalone variable, value: \"Alice\""],
+      ["function greet({ name, age })", "destructure directly in the parameter list"]
+    ],
+    expected: ["Alice", "23", "Raleigh", "Alice is 23"],
+    tryit: "Destructure <strong>name</strong> and <strong>age</strong> from a user inside a <span class='cr'>.forEach()</span> loop and print them."
+  },
+  {
+    title: "Spread operator — copy & update",
+    concept: "The spread operator (<span class='cr'>...</span>) expands an array or object in place. Use it to copy data without modifying the original — a core principle in modern JS.",
+    code: "let nums = [1, 2, 3];\nlet more = [...nums, 4, 5];\nconsole.log(nums);\nconsole.log(more);\n\nlet user = { name: \"Alice\", age: 23 };\nlet updated = { ...user, age: 24, city: \"Durham\" };\nconsole.log(user.age);\nconsole.log(updated);",
+    lines: [
+      ["[...nums, 4, 5]", "copy all items from nums, then add 4 and 5"],
+      ["console.log(nums)", "original is unchanged"],
+      ["{ ...user, age: 24 }", "copy all user properties, override age with 24"],
+      ["user.age", "still 23 — spread never modifies the original"]
+    ],
+    expected: ["[1,2,3]", "[1,2,3,4,5]", "23", "{name:\"Alice\",age:24,city:\"Durham\"}"],
+    tryit: "Create a user object. Use spread to create a copy with a different city, then print both."
+  },
+  {
+    title: "Chaining .filter() and .map()",
+    concept: "Array methods return new arrays, so you can chain them directly. This is the most common real-world data pattern: filter to what you want, then transform it.",
+    code: "let users = [\n  { name: \"Alice\", age: 23 },\n  { name: \"Bob\", age: 17 },\n  { name: \"Carl\", age: 30 }\n];\n\nlet adultNames = users\n  .filter(u => u.age >= 18)\n  .map(u => u.name);\n\nconsole.log(adultNames);\n\nlet minorInfo = users\n  .filter(u => u.age < 18)\n  .map(u => u.name + \" (\" + u.age + \")\");\n\nconsole.log(minorInfo);",
+    lines: [
+      [".filter(u => u.age >= 18)", "step 1: keep adults only"],
+      [".map(u => u.name)", "step 2: transform — extract just names"],
+      [".filter(u => u.age < 18)", "new chain: keep minors only"],
+      ["u.name + \" (\" + u.age + \")\"", "build a formatted string per item"]
+    ],
+    expected: ["[\"Alice\",\"Carl\"]", "[\"Bob (17)\"]"],
+    tryit: "Chain filter + map to get names of users whose name has more than 3 characters."
+  },
+  {
+    title: "Final practice — products",
+    concept: "A complete real-world data exercise: filter, transform, find, spread, chain. Run it step by step and confirm each output matches what you expect.",
+    code: "let products = [\n  { name: \"Laptop\", price: 1000 },\n  { name: \"Phone\",  price: 500 },\n  { name: \"Tablet\", price: 300 }\n];\n\nlet names      = products.map(p => p.name);\nlet affordable = products.filter(p => p.price < 600);\nlet laptop     = products.find(p => p.name === \"Laptop\");\nlet discounted = affordable.map(p => ({ ...p, price: +(p.price * 0.9).toFixed(2) }));\n\nconsole.log(names);\nconsole.log(affordable.map(p => p.name));\nconsole.log(laptop.price);\nconsole.log(discounted);",
+    lines: [
+      ["products.map(p => p.name)", "extract all product names"],
+      ["products.filter(p => p.price < 600)", "keep only Phone and Tablet"],
+      ["products.find(p => p.name === \"Laptop\")", "find the laptop object"],
+      ["{ ...p, price: ... }", "copy the product, override price with discounted value"]
+    ],
+    expected: ["[\"Laptop\",\"Phone\",\"Tablet\"]", "[\"Phone\",\"Tablet\"]", "1000", "[{name:\"Phone\",price:450},{name:\"Tablet\",price:270}]"],
+    tryit: "Add a <strong>stock</strong> property to each product. Filter to only in-stock items (stock > 0), then map to names."
+  }
+];
+</script>
+<script src="engine.js"></script>
+</body>
+</html>

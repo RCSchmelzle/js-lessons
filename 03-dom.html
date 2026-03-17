@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lesson 3 — DOM & Interaction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css" />
+</head>
+<body>
+<div></div>
+<script>
+window.LESSON_INFO = { num: "Lesson 3", name: "DOM & Interaction", prev: "02-data.html", next: "04-how-apps-work.html" };
+window.HAS_CANVAS = true;
+window.SLIDES = [
+  {
+    title: "Selecting elements — querySelector",
+    concept: "Before you can change anything on the page, you must <strong>select it</strong>. <span class='cr'>document.querySelector()</span> finds the first matching element. Use <span class='cr'>#id</span> for IDs, <span class='cr'>.class</span> for classes, or just a tag name. <strong>Try it on the live preview above!</strong>",
+    canvasHTML: '<h2 id="heading">Hello World</h2>\n<p id="text">This is a paragraph.</p>\n<button id="btn">Click me</button>',
+    code: `// These select REAL elements in the preview above!\nconst heading = document.querySelector("#heading");\nconsole.log("Found heading:", heading.innerText);\n\nconst text = document.querySelector("#text");\nconsole.log("Found text:", text.innerText);\n\nconst btn = document.querySelector("#btn");\nconsole.log("Found button:", btn.innerText);`,
+    lines: [
+      ['querySelector("#heading")', 'find element with id="heading" — # means ID'],
+      ['querySelector("#text")', 'find the paragraph by its ID'],
+      ['querySelector("#btn")', 'find the button by its ID'],
+      ['.innerText', 'reads the visible text content of the element']
+    ],
+    expected: ["Found heading: Hello World", "Found text: This is a paragraph.", "Found button: Click me"],
+    tryit: "Try selecting by tag name: <span class='cr'>document.querySelector(\"h2\")</span>. What happens if you use a selector that doesn't exist?"
+  },
+  {
+    title: "Changing content — innerText",
+    concept: "Once you have an element, <span class='cr'>.innerText</span> changes its visible text. <span class='cr'>.innerHTML</span> can set HTML markup. Watch the <strong>live preview update</strong> when you run!",
+    canvasHTML: '<h2 id="heading">Original Heading</h2>\n<p id="text">Original paragraph text.</p>',
+    code: `const heading = document.querySelector("#heading");\nconst text = document.querySelector("#text");\n\n// Change the text — watch the preview!\nheading.innerText = "I changed this!";\ntext.innerText = "JavaScript just updated me.";\n\nconsole.log("Heading is now:", heading.innerText);\nconsole.log("Text is now:", text.innerText);`,
+    lines: [
+      ['.innerText = "..."', 'replaces the visible text of the element'],
+      ['heading.innerText', 'changes the <h2> in the preview above'],
+      ['text.innerText', 'changes the <p> in the preview above'],
+      ['watch the preview', 'the live canvas updates in real time!']
+    ],
+    expected: ["Heading is now: I changed this!", "Text is now: JavaScript just updated me."],
+    tryit: "Try <span class='cr'>text.innerHTML = \"&lt;b&gt;Bold&lt;/b&gt; and normal\"</span> to set HTML content. See the difference from innerText."
+  },
+  {
+    title: "Changing styles — classList",
+    concept: "Don't set styles directly in JS. Instead, add/remove CSS <strong>classes</strong>. <span class='cr'>.classList.toggle()</span> adds a class if absent, removes if present. Click Run multiple times!",
+    canvasHTML: '<h2 id="heading">Toggle my style!</h2>\n<p id="text">Click Run to highlight me.</p>\n<p id="text2">I can be highlighted too.</p>',
+    code: `const heading = document.querySelector("#heading");\nconst text = document.querySelector("#text");\n\n// Toggle the "highlight" class (red + bold)\nheading.classList.toggle("highlight");\nconsole.log("Heading classes:", heading.className || "(none)");\n\n// Add it to text\ntext.classList.add("highlight");\nconsole.log("Text classes:", text.className || "(none)");\n\n// Direct style (use sparingly)\ntext.style.fontSize = "18px";`,
+    lines: [
+      ['.classList.toggle("highlight")', 'add if absent, remove if present'],
+      ['.classList.add("highlight")', 'always adds the class'],
+      ['.classList.remove(...)', 'always removes the class'],
+      ['.style.fontSize', 'direct style — use classList instead when possible']
+    ],
+    expected: ["Heading classes: highlight", "Text classes: highlight"],
+    tryit: "Run multiple times and watch the heading toggle. Then try <span class='cr'>.classList.remove(\"highlight\")</span> on the text."
+  },
+  {
+    title: "Creating elements — createElement",
+    concept: "JS can build new HTML elements. The pattern: <strong>create, set content, append</strong>. Click Run multiple times to add more items to the live preview!",
+    canvasHTML: '<h3>Shopping List</h3>\n<ul id="list"></ul>',
+    code: `const list = document.querySelector("#list");\n\n// Create a new list item\nconst li = document.createElement("li");\nli.innerText = "Item " + (list.children.length + 1);\n\n// Add it to the list\nlist.appendChild(li);\n\nconsole.log("Added:", li.innerText);\nconsole.log("Total items:", list.children.length);`,
+    lines: [
+      ['createElement("li")', 'create a new <li> element (not yet on page)'],
+      ['li.innerText = "..."', 'set its text before adding to page'],
+      ['list.appendChild(li)', 'add the element inside the list'],
+      ['list.children.length', 'count how many items are in the list']
+    ],
+    expected: ["Added: Item 1", "Total items: 1"],
+    tryit: "Click Run several times — each click adds another item. Then try creating a <span class='cr'>&lt;p&gt;</span> element and appending it to the canvas."
+  },
+  {
+    title: "Removing elements",
+    concept: "Call <span class='cr'>.remove()</span> on any element to delete it from the page. Watch items disappear from the live preview!",
+    canvasHTML: '<ul id="list">\n  <li>Apple</li>\n  <li>Banana</li>\n  <li>Cherry</li>\n  <li>Date</li>\n</ul>',
+    code: `const list = document.querySelector("#list");\n\nconsole.log("Before:", list.children.length, "items");\n\n// Remove the first item\nconst first = list.querySelector("li");\nif (first) {\n  console.log("Removing:", first.innerText);\n  first.remove();\n}\n\nconsole.log("After:", list.children.length, "items");\n\n// Show remaining\nlet remaining = [...list.children].map(li => li.innerText);\nconsole.log("Remaining:", remaining);`,
+    lines: [
+      ['first.remove()', 'removes the element from the page entirely'],
+      ['list.querySelector("li")', 'find the first <li> inside the list'],
+      ['list.children.length', 'count goes down after removal'],
+      ['[...list.children]', 'convert children to array so we can use .map()']
+    ],
+    expected: ["Before: 4 items", "Removing: Apple", "After: 3 items", "Remaining: [\"Banana\",\"Cherry\",\"Date\"]"],
+    tryit: "Click Run multiple times to remove items one by one. Then try removing the <strong>last</strong> item instead (hint: <span class='cr'>list.lastElementChild</span>)."
+  },
+  {
+    title: "Events — addEventListener",
+    concept: "This is the most important part. <span class='cr'>addEventListener</span> runs code when the user does something. Click Run to attach the handler, then <strong>click the button in the preview</strong>!",
+    canvasHTML: '<h3 id="counter-display">Count: 0</h3>\n<button id="inc-btn">+ Add</button>\n<button id="dec-btn">- Subtract</button>\n<button id="reset-btn">Reset</button>',
+    code: `const display = document.querySelector("#counter-display");\nconst incBtn = document.querySelector("#inc-btn");\nconst decBtn = document.querySelector("#dec-btn");\nconst resetBtn = document.querySelector("#reset-btn");\n\nlet count = 0;\n\nfunction updateDisplay() {\n  display.innerText = "Count: " + count;\n}\n\nincBtn.addEventListener("click", () => {\n  count++;\n  updateDisplay();\n  console.log("Incremented to", count);\n});\n\ndecBtn.addEventListener("click", () => {\n  count--;\n  updateDisplay();\n  console.log("Decremented to", count);\n});\n\nresetBtn.addEventListener("click", () => {\n  count = 0;\n  updateDisplay();\n  console.log("Reset to 0");\n});\n\nconsole.log("Event listeners attached! Click the buttons above.");`,
+    lines: [
+      ['addEventListener("click", ...)', 'run this function when the button is clicked'],
+      ['() => { ... }', 'arrow function — the callback that runs on each click'],
+      ['count++', 'update the data (state)'],
+      ['updateDisplay()', 'sync the UI with the new data']
+    ],
+    expected: ["Event listeners attached! Click the buttons above."],
+    tryit: "Click Run first, then click the buttons in the preview. Try adding a <strong>double</strong> button that multiplies count by 2."
+  },
+  {
+    title: "Input + events — building a to-do list",
+    concept: "Combine input fields, events, and DOM manipulation. Type a task, click Add (or press Enter), and watch it appear. This is a <strong>real interactive app</strong>!",
+    canvasHTML: '<div style="display:flex;gap:8px;margin-bottom:10px">\n  <input id="todo-input" placeholder="Enter a task..." style="flex:1" />\n  <button id="todo-add">Add</button>\n</div>\n<ul id="todo-list"></ul>\n<p id="todo-status" style="font-size:12px;opacity:0.6;margin-top:8px"></p>',
+    code: `const input = document.querySelector("#todo-input");\nconst addBtn = document.querySelector("#todo-add");\nconst list = document.querySelector("#todo-list");\nconst status = document.querySelector("#todo-status");\n\nfunction addTask() {\n  const text = input.value.trim();\n  if (!text) return;\n\n  const li = document.createElement("li");\n  li.innerText = text;\n  li.style.cursor = "pointer";\n\n  // Click task to mark done\n  li.addEventListener("click", () => {\n    li.classList.toggle("done");\n  });\n\n  // Double-click to delete\n  li.addEventListener("dblclick", () => {\n    li.remove();\n    updateStatus();\n  });\n\n  list.appendChild(li);\n  input.value = "";\n  input.focus();\n  updateStatus();\n  console.log("Added:", text);\n}\n\nfunction updateStatus() {\n  status.innerText = list.children.length + " tasks";\n}\n\naddBtn.addEventListener("click", addTask);\ninput.addEventListener("keypress", (e) => {\n  if (e.key === "Enter") addTask();\n});\n\nconsole.log("To-do app ready! Type a task and click Add.");`,
+    lines: [
+      ['input.value.trim()', 'get text, remove whitespace'],
+      ['li.addEventListener("click", ...)', 'click to toggle "done" style'],
+      ['li.addEventListener("dblclick", ...)', 'double-click to delete'],
+      ['input.addEventListener("keypress", ...)', 'Enter key triggers add'],
+      ['input.focus()', 'puts cursor back in the input field']
+    ],
+    expected: ["To-do app ready! Type a task and click Add."],
+    tryit: "Click Run, then type tasks and add them. Click a task to mark it done. Double-click to delete. This is a <strong>real working app</strong>!"
+  }
+];
+</script>
+<script src="engine.js"></script>
+</body>
+</html>

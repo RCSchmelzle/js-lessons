@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lesson 9 — Debugging</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css" />
+</head>
+<body>
+<div></div>
+<script>
+window.LESSON_INFO = { num: "Lesson 9", name: "Debugging", prev: "08-bootstrap.html", next: null };
+window.SLIDES = [
+  {
+    title: "The debugging mindset",
+    concept: "When something breaks, don't think <em>\"I don't understand JavaScript\"</em>. Think: <strong>\"One step in my program is not doing what I expect.\"</strong> Your job is to find which step is wrong.",
+    code: `// This code has a bug. Can you find it?\nlet items = ["apple", "banana", "cherry"];\n\n// Goal: print each item in uppercase\nfor (let i = 0; i <= items.length; i++) {\n  console.log(items[i].toUpperCase());\n}`,
+    lines: [
+      ["i <= items.length", "BUG: should be < not <= (off by one)"],
+      ["items[3]", "undefined — there is no index 3 in a 3-item array"],
+      [".toUpperCase()", "crashes when called on undefined"],
+      ["fix: i < items.length", "loop stops before going out of bounds"]
+    ],
+    expected: ["APPLE", "BANANA", "CHERRY", "Error: Cannot read properties of undefined"],
+    tryit: "Fix the bug (change <span class='cr'>&lt;=</span> to <span class='cr'>&lt;</span>) and run again. Then add a <strong>console.log(i)</strong> inside the loop to see the index at each step."
+  },
+  {
+    title: "Step 1 — Did the code run?",
+    concept: "The first thing to check: <strong>did the code even execute?</strong> Add a <span class='cr'>console.log</span> at the top. If you don't see it, the code never ran — check your script connection or event listener.",
+    code: `// Scenario: button click handler doesn't seem to work\n\nfunction handleClick() {\n  console.log("1. Handler called"); // Step 1: did it run?\n  \n  let value = "test";\n  console.log("2. Value:", value);   // Step 2: what value?\n  \n  // ... rest of logic\n  console.log("3. Done");            // Step 3: did it finish?\n}\n\n// Simulate calling it\nhandleClick();\n\n// If you DON'T see "1. Handler called",\n// the function never ran. Check your addEventListener.`,
+    lines: [
+      ["console.log(\"1. Handler called\")", "first checkpoint — confirms code is running"],
+      ["console.log(\"2. Value:\", value)", "second checkpoint — shows you the data"],
+      ["console.log(\"3. Done\")", "third checkpoint — confirms it finished without errors"],
+      ["if missing", "no output = code never ran, check event/script link"]
+    ],
+    expected: ["1. Handler called", "2. Value: test", "3. Done"],
+    tryit: "Comment out the handleClick() call at the bottom. Run it. Notice: no output. That's what happens when code doesn't run."
+  },
+  {
+    title: "Step 2 — What values do I have?",
+    concept: "If the code runs but produces wrong results, <strong>log your variables</strong>. The bug is usually a value that isn't what you expected.",
+    code: `// Bug: total should be 60 but it's NaN\nlet prices = [10, 20, "thirty"];\nlet total = 0;\n\nfor (let price of prices) {\n  console.log("Adding:", price, "| type:", typeof price);\n  total += price;\n  console.log("Running total:", total);\n}\n\nconsole.log("Final total:", total);`,
+    lines: [
+      ["typeof price", "reveals that \"thirty\" is a string, not a number"],
+      ["total += price", "adding a string to a number produces NaN"],
+      ["log each step", "you can see exactly where it goes wrong"],
+      ["fix", "validate/convert data before using it"]
+    ],
+    expected: ["Adding: 10 | type: number", "Running total: 10", "Adding: 20 | type: number", "Running total: 30", "Adding: thirty | type: string", "Running total: 30thirty", "Final total: 30thirty"],
+    tryit: "Fix the bug: add a check <span class='cr'>if (typeof price === \"number\")</span> before adding. Or convert with <span class='cr'>Number(price)</span>."
+  },
+  {
+    title: "Step 3 — Where does it break?",
+    concept: "Add logs <strong>between each step</strong> of your code. The bug is between the last log you see and the first one you don't.",
+    code: `// Bug: we expect 3 results but get 0\nlet users = [\n  { name: "Alice", age: 23 },\n  { name: "Bob", age: 17 },\n  { name: "Carl", age: 30 }\n];\n\nconsole.log("Step 1: users loaded", users.length);\n\nlet adults = users.filter(u => {\n  console.log("  Checking:", u.name, "age:", u.age, ">=18?", u.age >= 18);\n  return u.age > 18;  // BUG: should be >= 18\n});\n\nconsole.log("Step 2: adults found:", adults.length);\nconsole.log("Step 3: names:", adults.map(u => u.name));`,
+    lines: [
+      ["Step 1", "confirms data is loaded correctly"],
+      ["Checking: Alice age: 23", "you can see the condition being evaluated"],
+      [">= 18 vs > 18", "Alice (23) passes both, but what about exactly 18?"],
+      ["Step 2 + Step 3", "confirms the filter result"]
+    ],
+    expected: ["Step 1: users loaded 3", "  Checking: Alice age: 23 >=18? true", "  Checking: Bob age: 17 >=18? false", "  Checking: Carl age: 30 >=18? true", "Step 2: adults found: 2", "Step 3: names: [\"Alice\",\"Carl\"]"],
+    tryit: "Change Bob's age to 18. Notice he's excluded with <span class='cr'>&gt; 18</span> but included with <span class='cr'>&gt;= 18</span>. The log makes this obvious."
+  },
+  {
+    title: "Common bugs and fixes",
+    concept: "Most beginner bugs fall into a few categories. Learn to recognize the <strong>error message patterns</strong> and you'll fix them in seconds.",
+    code: `// Bug 1: "Cannot read properties of null"\nlet btn = null; // simulates querySelector not finding element\ntry {\n  btn.addEventListener("click", () => {});\n} catch(e) {\n  console.log("Bug 1:", e.message);\n  console.log("Fix: check your selector — element not found\\n");\n}\n\n// Bug 2: "is not a function"\nlet data = { name: "Alice" };\ntry {\n  data.toUppercase();\n} catch(e) {\n  console.log("Bug 2:", e.message);\n  console.log("Fix: check spelling — it's toUpperCase()\\n");\n}\n\n// Bug 3: "is not defined"\ntry {\n  console.log(userName);\n} catch(e) {\n  console.log("Bug 3:", e.message);\n  console.log("Fix: variable doesn't exist — typo or wrong scope");\n}`,
+    lines: [
+      ["Cannot read properties of null", "querySelector returned null — wrong ID/selector"],
+      ["is not a function", "method name is misspelled or doesn't exist"],
+      ["is not defined", "variable was never created — typo or scope issue"],
+      ["try/catch", "wrapping in try/catch lets you see the error without crashing"]
+    ],
+    expected: ["Bug 1: Cannot read properties of null (reading 'addEventListener')", "Fix: check your selector — element not found", "", "Bug 2: data.toUppercase is not a function", "Fix: check spelling — it's toUpperCase()", "", "Bug 3: userName is not defined", "Fix: variable doesn't exist — typo or wrong scope"],
+    tryit: "For each bug, write the <strong>fixed version</strong> and verify it works."
+  },
+  {
+    title: "Trace the Event-Logic-UI flow",
+    concept: "Every app bug is in one of three places: <strong>the event didn't fire</strong>, <strong>the logic is wrong</strong>, or <strong>the UI didn't update</strong>. Add a log at each stage to find which one broke.",
+    code: `// Simulated app with a bug\nlet state = { count: 0 };\nlet ui = { text: "" };\n\nfunction onClick() {\n  console.log("[EVENT] click fired");\n  \n  state.count++;\n  console.log("[LOGIC] count is now:", state.count);\n  \n  // BUG: updating wrong property\n  ui.label = "Count: " + state.count;  // should be ui.text\n  console.log("[UI] ui.text is:", ui.text);\n  console.log("[UI] ui.label is:", ui.label);\n}\n\nonClick();\nonClick();\n\nconsole.log("\\nFinal state:", state.count);\nconsole.log("Final UI text:", ui.text || "(empty — bug!)");\nconsole.log("Final UI label:", ui.label);`,
+    lines: [
+      ["[EVENT]", "confirms the handler ran"],
+      ["[LOGIC]", "confirms the data updated correctly"],
+      ["[UI]", "reveals the bug — wrong property name"],
+      ["ui.text is empty", "the display property was never set — that's the bug"]
+    ],
+    expected: ["[EVENT] click fired", "[LOGIC] count is now: 1", "[UI] ui.text is: ", "[UI] ui.label is: Count: 1", "[EVENT] click fired", "[LOGIC] count is now: 2", "[UI] ui.text is: ", "[UI] ui.label is: Count: 2", "", "Final state: 2", "Final UI text: (empty — bug!)", "Final UI label: Count: 2"],
+    tryit: "Fix the bug (change <span class='cr'>ui.label</span> to <span class='cr'>ui.text</span>). Then verify all three checkpoints show correct values."
+  },
+  {
+    title: "The golden rule + checklist",
+    concept: "<strong>If you don't know what your code is doing, add a console.log.</strong> Debugging is not failure — it's the process of understanding your program. Every bug you fix makes you better.",
+    code: `// The debugging checklist:\nlet checklist = [\n  "1. Did the code run? (add console.log at top)",\n  "2. What values do I have? (log variables)",\n  "3. Where does it break? (log between steps)",\n  "4. What does the error say? (read the message)",\n  "5. Did I save the file? (Cmd+S / Ctrl+S)",\n  "6. Did I refresh? (or is Live Server running?)",\n  "7. Am I looking at the Console tab?"\n];\n\nconsole.log("DEBUGGING CHECKLIST");\nconsole.log("===================");\nchecklist.forEach(item => console.log(item));\n\nconsole.log("\\nCommon quick fixes:");\nconsole.log("- Typo in variable/function name");\nconsole.log("- Forgot 'await' before fetch");\nconsole.log("- Wrong selector (#id vs .class)");\nconsole.log("- Script loaded before HTML (move to bottom)");\nconsole.log("- Off-by-one in loop (< vs <=)");`,
+    lines: [
+      ["did the code run", "first thing to verify — always"],
+      ["what values", "log everything you're unsure about"],
+      ["where does it break", "narrow down to the exact line"],
+      ["read the error message", "it usually tells you exactly what's wrong"]
+    ],
+    expected: ["DEBUGGING CHECKLIST", "===================", "1. Did the code run? (add console.log at top)", "2. What values do I have? (log variables)", "3. Where does it break? (log between steps)", "4. What does the error say? (read the message)", "5. Did I save the file? (Cmd+S / Ctrl+S)", "6. Did I refresh? (or is Live Server running?)", "7. Am I looking at the Console tab?", "", "Common quick fixes:", "- Typo in variable/function name", "- Forgot 'await' before fetch", "- Wrong selector (#id vs .class)", "- Script loaded before HTML (move to bottom)", "- Off-by-one in loop (< vs <=)"],
+    tryit: "Write a small program with an intentional bug. Then use the checklist to find and fix it systematically."
+  }
+];
+</script>
+<script src="engine.js"></script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lesson 7 — Scope & Closures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css" />
+</head>
+<body>
+<div></div>
+<script>
+window.LESSON_INFO = { num: "Lesson 7", name: "Scope & Closures", prev: "06-async-apis.html", next: "08-bootstrap.html" };
+window.SLIDES = [
+  {
+    title: "Scope — where variables exist",
+    concept: "Scope determines where a variable can be used. Variables created inside a function are <strong>local</strong> — they don't exist outside. Variables outside functions are <strong>global</strong>.",
+    code: "let globalVar = \"I am global\";\n\nfunction test() {\n  let localVar = \"I am local\";\n  console.log(globalVar); // works\n  console.log(localVar);  // works\n}\n\ntest();\n\nconsole.log(globalVar); // works\n\ntry {\n  console.log(localVar); // error!\n} catch(e) {\n  console.log(\"Error:\", e.message);\n}",
+    lines: [
+      ["globalVar", "defined outside — accessible everywhere"],
+      ["localVar", "defined inside function — only accessible there"],
+      ["test()", "inside the function, both are accessible"],
+      ["console.log(localVar)", "outside the function — ReferenceError"]
+    ],
+    expected: ["I am global", "I am local", "I am global", "Error: localVar is not defined"],
+    tryit: "Create a variable inside an <span class='cr'>if</span> block. Try to access it outside. What happens?"
+  },
+  {
+    title: "Block scope — let vs var",
+    concept: "<span class='cr'>let</span> and <span class='cr'>const</span> are <strong>block-scoped</strong> — they stay inside <span class='cr'>{ }</span>. The older <span class='cr'>var</span> ignores blocks and leaks out. Always use <span class='cr'>let</span>/<span class='cr'>const</span>.",
+    code: "if (true) {\n  let x = 10;\n  var y = 20;\n}\n\ntry {\n  console.log(x);\n} catch(e) {\n  console.log(\"let x:\", e.message);\n}\n\nconsole.log(\"var y:\", y); // works! (leaked out)\n\nfor (let i = 0; i < 3; i++) {}\ntry {\n  console.log(i);\n} catch(e) {\n  console.log(\"let i:\", e.message);\n}",
+    lines: [
+      ["let x = 10", "block-scoped: only exists inside the if { }"],
+      ["var y = 20", "function-scoped: leaks out of the block"],
+      ["console.log(y)", "var leaked — this works (bad!)"],
+      ["let i in for loop", "i is contained to the loop block"]
+    ],
+    expected: ["let x: x is not defined", "var y: 20", "let i: i is not defined"],
+    tryit: "Try using <span class='cr'>var</span> in a for loop, then access it outside. Compare with <span class='cr'>let</span>."
+  },
+  {
+    title: "Closures — functions remember things",
+    concept: "A <strong>closure</strong> is when a function keeps access to variables from where it was created, even after that outer function has finished running. This is one of the most powerful JS concepts.",
+    code: "function outer() {\n  let count = 0;\n\n  return function inner() {\n    count++;\n    return count;\n  };\n}\n\nlet counter = outer();\n\nconsole.log(counter()); // 1\nconsole.log(counter()); // 2\nconsole.log(counter()); // 3\n\n// Each call creates a separate closure\nlet counter2 = outer();\nconsole.log(counter2()); // 1 (separate count!)",
+    lines: [
+      ["function outer()", "creates a scope with count = 0"],
+      ["return function inner()", "returns a function that remembers count"],
+      ["counter = outer()", "counter is now the inner function, with its own count"],
+      ["counter()", "each call increments the remembered count"],
+      ["counter2 = outer()", "new closure, new count — completely independent"]
+    ],
+    expected: ["1", "2", "3", "1"],
+    tryit: "Modify outer to accept a <strong>startValue</strong> parameter. Make one counter start at 10 and another at 100."
+  },
+  {
+    title: "Closures in practice",
+    concept: "Closures aren't just theory — they appear in event handlers, callbacks, and private data. Any time a function is created inside another function, it forms a closure.",
+    code: "function createGreeter(greeting) {\n  return function(name) {\n    return greeting + \", \" + name + \"!\";\n  };\n}\n\nlet sayHello = createGreeter(\"Hello\");\nlet sayHi = createGreeter(\"Hi\");\n\nconsole.log(sayHello(\"Alice\"));\nconsole.log(sayHello(\"Bob\"));\nconsole.log(sayHi(\"Carl\"));\n\n// Private counter pattern\nfunction createCounter(label) {\n  let n = 0;\n  return {\n    increment() { n++; console.log(label + \": \" + n); },\n    reset() { n = 0; console.log(label + \": reset\"); }\n  };\n}\n\nlet clicks = createCounter(\"clicks\");\nclicks.increment();\nclicks.increment();\nclicks.reset();",
+    lines: [
+      ["createGreeter(greeting)", "returns a function that remembers greeting"],
+      ["sayHello(\"Alice\")", "the closure fills in \"Hello\" automatically"],
+      ["createCounter(label)", "returns an object with methods that share private n"],
+      ["n is private", "no way to access n directly from outside — only through methods"]
+    ],
+    expected: ["Hello, Alice!", "Hello, Bob!", "Hi, Carl!", "clicks: 1", "clicks: 2", "clicks: reset"],
+    tryit: "Add a <strong>getCount()</strong> method to the counter that returns the current value without incrementing."
+  },
+  {
+    title: "this — what object am I in?",
+    concept: "Inside an object method, <span class='cr'>this</span> refers to the object that called the method. It's how methods access their own data.",
+    code: "let person = {\n  name: \"Alice\",\n  age: 23,\n  greet() {\n    console.log(\"Hi, I'm \" + this.name);\n    console.log(\"Age: \" + this.age);\n  }\n};\n\nperson.greet();\n\nlet car = {\n  brand: \"Toyota\",\n  describe() {\n    return \"This is a \" + this.brand;\n  }\n};\n\nconsole.log(car.describe());",
+    lines: [
+      ["this.name", "inside person.greet(), this = person"],
+      ["this.age", "same — this refers to the object calling the method"],
+      ["person.greet()", "the dot before greet sets this = person"],
+      ["this.brand", "inside car.describe(), this = car"]
+    ],
+    expected: ["Hi, I'm Alice", "Age: 23", "This is a Toyota"],
+    tryit: "Create a <strong>calculator</strong> object with a value property and add/subtract methods that use <span class='cr'>this.value</span>."
+  },
+  {
+    title: "Arrow functions and this (gotcha!)",
+    concept: "Arrow functions do <strong>NOT</strong> have their own <span class='cr'>this</span>. They inherit it from the surrounding scope. Use regular functions for object methods.",
+    code: "let person = {\n  name: \"Alice\",\n  // Regular function — this works\n  greetRegular() {\n    console.log(\"Regular:\", this.name);\n  },\n  // Arrow function — this breaks\n  greetArrow: () => {\n    console.log(\"Arrow:\", typeof this.name);\n  }\n};\n\nperson.greetRegular();\nperson.greetArrow();\n\n// But arrows ARE useful inside methods:\nlet team = {\n  members: [\"Alice\", \"Bob\"],\n  show() {\n    // Arrow inherits 'this' from show()\n    this.members.forEach(m => {\n      console.log(m + \" is on the team\");\n    });\n  }\n};\n\nteam.show();",
+    lines: [
+      ["greetRegular()", "regular function: this = person (correct)"],
+      ["greetArrow: () => {...}", "arrow: this is NOT person — it's the outer scope"],
+      ["this.members.forEach(m => ...)", "arrow inside a method: inherits this from show()"],
+      ["rule", "use regular functions for methods, arrows for callbacks inside methods"]
+    ],
+    expected: ["Regular: Alice", "Arrow: undefined", "Alice is on the team", "Bob is on the team"],
+    tryit: "Try assigning a regular method to a variable and calling it. What happens to <span class='cr'>this</span>?"
+  },
+  {
+    title: "Putting it together — factory functions",
+    concept: "Combine scope, closures, and this to create clean, reusable code. Factory functions use closures to create objects with private state — a very common professional pattern.",
+    code: "function createUser(name, age) {\n  // Private — not accessible from outside\n  let loginCount = 0;\n\n  return {\n    name,\n    age,\n    login() {\n      loginCount++;\n      console.log(this.name + \" logged in (\" + loginCount + \" times)\");\n    },\n    getStats() {\n      return { user: this.name, logins: loginCount };\n    }\n  };\n}\n\nlet alice = createUser(\"Alice\", 23);\nlet bob = createUser(\"Bob\", 17);\n\nalice.login();\nalice.login();\nbob.login();\n\nconsole.log(alice.getStats());\nconsole.log(bob.getStats());",
+    lines: [
+      ["let loginCount = 0", "private variable — closure keeps it alive"],
+      ["return { name, age, ... }", "public interface — these are accessible"],
+      ["this.name inside login()", "regular method, so this = the returned object"],
+      ["loginCount", "accessed via closure — no this needed, it's in the outer scope"],
+      ["alice vs bob", "each call to createUser creates a separate closure"]
+    ],
+    expected: ["Alice logged in (1 times)", "Alice logged in (2 times)", "Bob logged in (1 times)", "{user:\"Alice\",logins:2}", "{user:\"Bob\",logins:1}"],
+    tryit: "Add a <strong>logout()</strong> method and a <strong>loggedIn</strong> boolean state. Login sets it to true, logout sets it to false."
+  }
+];
+</script>
+<script src="engine.js"></script>
+</body>
+</html>

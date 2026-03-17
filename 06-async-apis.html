@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lesson 6 — Async & APIs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css" />
+</head>
+<body>
+<div></div>
+<script>
+window.LESSON_INFO = { num: "Lesson 6", name: "Async & APIs", prev: "05-events-forms.html", next: "07-scope-closures.html" };
+window.SLIDES = [
+  {
+    title: "Async code — the big idea",
+    concept: "So far, code runs top to bottom instantly. But some things take time: loading data, waiting for a server. That's <strong>asynchronous behavior</strong>. JS doesn't wait — it keeps going and comes back later.",
+    code: "console.log(\"Start\");\n\nsetTimeout(() => {\n  console.log(\"Later (after 1 second)\");\n}, 1000);\n\nconsole.log(\"End\");",
+    lines: [
+      ["console.log(\"Start\")", "runs immediately"],
+      ["setTimeout(() => {...}, 1000)", "schedule code to run after 1000ms (1 second)"],
+      ["console.log(\"End\")", "runs immediately — doesn't wait for setTimeout"],
+      ["\"Later\"", "runs last, after the 1-second delay"]
+    ],
+    expected: ["Start", "End", "Later (after 1 second)"],
+    tryit: "Add another setTimeout with 500ms. Predict the order before running."
+  },
+  {
+    title: "What is an API?",
+    concept: "An API is a way to get data from somewhere else. It usually returns <strong>JSON</strong> — which looks just like a JavaScript object. APIs power weather apps, social feeds, everything.",
+    code: "// Simulated API response (this is what JSON looks like)\nlet response = {\n  quote: \"The only way to do great work is to love what you do.\",\n  author: \"Steve Jobs\"\n};\n\nconsole.log(\"Quote:\", response.quote);\nconsole.log(\"Author:\", response.author);\n\n// JSON is just text that becomes an object\nlet jsonText = '{\"name\":\"Alice\",\"age\":23}';\nlet parsed = JSON.parse(jsonText);\nconsole.log(parsed.name);",
+    lines: [
+      ["response.quote", "access data from the API response object"],
+      ["JSON", "JavaScript Object Notation — the data format APIs use"],
+      ["JSON.parse(jsonText)", "convert a JSON string into a real JS object"],
+      ["parsed.name", "now you can access properties normally"]
+    ],
+    expected: ["Quote: The only way to do great work is to love what you do.", "Author: Steve Jobs", "Alice"],
+    tryit: "Create your own JSON string with 3 properties. Parse it and print each one."
+  },
+  {
+    title: "fetch() — requesting data",
+    concept: "<span class='cr'>fetch()</span> sends a request to a URL and returns a Promise. The <span class='cr'>.then()</span> chain processes the response. This is the older style — we'll upgrade to async/await next.",
+    code: "// Simulating fetch with a Promise\nfunction fakeFetch(url) {\n  return new Promise(resolve => {\n    console.log(\"Fetching:\", url);\n    resolve({ json: () => ({ quote: \"Stay hungry, stay foolish\", author: \"Steve Jobs\" }) });\n  });\n}\n\nfakeFetch(\"https://api.example.com/quote\")\n  .then(response => response.json())\n  .then(data => {\n    console.log(data.quote);\n    console.log(\"—\", data.author);\n  });",
+    lines: [
+      ["fetch(url)", "send a request to the URL"],
+      [".then(response => response.json())", "convert the raw response to a JS object"],
+      [".then(data => {...})", "now use the actual data"],
+      ["Promise", "an object representing a future value"]
+    ],
+    expected: ["Fetching: https://api.example.com/quote", "Stay hungry, stay foolish", "— Steve Jobs"],
+    tryit: "Add a <span class='cr'>.catch(err => console.log(err))</span> at the end of the chain for error handling."
+  },
+  {
+    title: "async/await — the modern way",
+    concept: "<span class='cr'>async/await</span> makes asynchronous code look like normal code. <span class='cr'>await</span> pauses until the result is ready. Much cleaner than <span class='cr'>.then()</span> chains.",
+    code: "function fakeFetch(url) {\n  return Promise.resolve({\n    json: () => ({ quote: \"Think different.\", author: \"Apple\" })\n  });\n}\n\nasync function getQuote() {\n  console.log(\"Fetching...\");\n  const response = await fakeFetch(\"https://api.example.com/quote\");\n  const data = await response.json();\n  console.log(data.quote);\n  console.log(\"—\", data.author);\n}\n\ngetQuote();",
+    lines: [
+      ["async function", "marks the function as asynchronous"],
+      ["await fakeFetch(...)", "pause here until the fetch completes"],
+      ["await response.json()", "pause until JSON parsing completes"],
+      ["reads top-to-bottom", "even though it's async — that's the magic of await"]
+    ],
+    expected: ["Fetching...", "Think different.", "— Apple"],
+    tryit: "Add a variable <strong>loading</strong> that is true before fetch and false after. Log it at each stage."
+  },
+  {
+    title: "Error handling with try/catch",
+    concept: "Network requests can fail: no internet, bad URL, server error. <span class='cr'>try/catch</span> lets you handle failures gracefully instead of crashing.",
+    code: "function fakeFetch(shouldFail) {\n  if (shouldFail) return Promise.reject(new Error(\"Network error\"));\n  return Promise.resolve({ json: () => ({ data: \"Success!\" }) });\n}\n\nasync function getData(shouldFail) {\n  try {\n    console.log(\"Fetching...\");\n    const response = await fakeFetch(shouldFail);\n    const data = await response.json();\n    console.log(\"Got:\", data.data);\n  } catch (error) {\n    console.log(\"Error:\", error.message);\n  }\n}\n\ngetData(false);\ngetData(true);",
+    lines: [
+      ["try { ... }", "attempt this code"],
+      ["catch (error) { ... }", "if anything in try throws, run this instead"],
+      ["error.message", "the error description string"],
+      ["Promise.reject(...)", "simulates a failed network request"]
+    ],
+    expected: ["Fetching...", "Got: Success!", "Fetching...", "Error: Network error"],
+    tryit: "Add a <strong>finally</strong> block that logs <strong>\"Done\"</strong> regardless of success or failure."
+  },
+  {
+    title: "Loading states — better UX",
+    concept: "Users need feedback while waiting. Set a loading message before fetching, clear it when done. This is the <strong>standard pattern</strong> in every real app.",
+    code: "let display = { text: \"\" };\n\nasync function loadQuote() {\n  display.text = \"Loading...\";\n  console.log(\"UI:\", display.text);\n\n  // Simulate network delay\n  await new Promise(r => setTimeout(r, 100));\n\n  try {\n    display.text = \"The best way to predict the future is to create it.\";\n    console.log(\"UI:\", display.text);\n  } catch (e) {\n    display.text = \"Failed to load\";\n    console.log(\"UI:\", display.text);\n  }\n}\n\nloadQuote();",
+    lines: [
+      ["display.text = \"Loading...\"", "show loading state immediately"],
+      ["await new Promise(...)", "simulate a network delay"],
+      ["display.text = quote", "update UI with the result"],
+      ["catch: \"Failed to load\"", "show error state if something went wrong"]
+    ],
+    expected: ["UI: Loading...", "UI: The best way to predict the future is to create it."],
+    tryit: "Add a <strong>disabled</strong> flag on the button during loading to prevent double-clicks."
+  },
+  {
+    title: "The async app pattern",
+    concept: "Every API-powered app follows this flow: <strong>user action, loading state, fetch data, update UI, handle errors</strong>. Master this pattern and you can build anything.",
+    code: "let state = { loading: false, data: null, error: null };\n\nfunction fakeFetch() {\n  return Promise.resolve({ title: \"Learn JS\", completed: false });\n}\n\nasync function fetchTodo() {\n  state.loading = true;\n  state.error = null;\n  console.log(\"State:\", JSON.stringify(state));\n\n  try {\n    let response = await fakeFetch();\n    state.data = response;\n    console.log(\"State:\", JSON.stringify(state));\n  } catch (e) {\n    state.error = e.message;\n  } finally {\n    state.loading = false;\n    console.log(\"Final:\", JSON.stringify(state));\n  }\n}\n\nfetchTodo();",
+    lines: [
+      ["state object", "tracks loading, data, and error in one place"],
+      ["state.loading = true", "set loading before fetch"],
+      ["state.data = response", "store the result on success"],
+      ["state.error = e.message", "store the error on failure"],
+      ["finally", "always runs — reset loading regardless of outcome"]
+    ],
+    expected: ["State: {loading:true,data:null,error:null}", "State: {loading:true,data:{title:\"Learn JS\",completed:false},error:null}", "Final: {loading:false,data:{title:\"Learn JS\",completed:false},error:null}"],
+    tryit: "Make fakeFetch randomly succeed or fail. Run it multiple times and observe the different state outcomes."
+  }
+];
+</script>
+<script src="engine.js"></script>
+</body>
+</html>

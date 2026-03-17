@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lesson 5 — Events & Forms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css" />
+</head>
+<body>
+<div></div>
+<script>
+window.LESSON_INFO = { num: "Lesson 5", name: "Events & Forms", prev: "04-how-apps-work.html", next: "06-async-apis.html" };
+window.HAS_CANVAS = true;
+window.SLIDES = [
+  {
+    title: "Reading user input",
+    concept: "<span class='cr'>input.value</span> gives you whatever the user typed. After processing, set <span class='cr'>input.value = \"\"</span> to clear it. <strong>Type something in the input and click the button!</strong>",
+    canvasHTML: '<div style="display:flex;gap:8px;margin-bottom:8px"><input id="myInput" placeholder="Type something..." style="flex:1" /><button id="myBtn">Submit</button></div>\n<p id="result"></p>',
+    code: `const input = document.querySelector("#myInput");\nconst btn = document.querySelector("#myBtn");\nconst result = document.querySelector("#result");\n\nbtn.addEventListener("click", () => {\n  const text = input.value;\n  console.log("User typed:", text);\n  result.innerText = "You said: " + text;\n  input.value = "";\n});\n\nconsole.log("Ready! Type something and click Submit.");`,
+    lines: [['input.value','whatever the user typed'],['result.innerText = ...','display the value on the page'],['input.value = ""','clear the input after reading'],['click handler','runs every time the button is clicked']],
+    expected: ["Ready! Type something and click Submit."],
+    tryit: "Click Run, type a message, click Submit. Try submitting empty — what happens?"
+  },
+  {
+    title: "Preventing empty input",
+    concept: "Guard clause: check if the input is empty <strong>before</strong> processing. <span class='cr'>.trim()</span> removes whitespace so spaces-only input is caught.",
+    canvasHTML: '<div style="display:flex;gap:8px;margin-bottom:8px"><input id="taskInput" placeholder="Enter task..." style="flex:1" /><button id="addBtn">Add</button></div>\n<p id="feedback" style="font-size:12px;opacity:0.7"></p>\n<ul id="list"></ul>',
+    code: `const input = document.querySelector("#taskInput");\nconst btn = document.querySelector("#addBtn");\nconst list = document.querySelector("#list");\nconst feedback = document.querySelector("#feedback");\n\nbtn.addEventListener("click", () => {\n  const text = input.value.trim();\n  if (text === "") {\n    feedback.innerText = "Please enter a task!";\n    console.log("Blocked: empty input");\n    return;\n  }\n  const li = document.createElement("li");\n  li.innerText = text;\n  list.appendChild(li);\n  feedback.innerText = "Added: " + text;\n  input.value = "";\n  input.focus();\n  console.log("Added:", text);\n});\n\nconsole.log("Ready! Try adding tasks.");`,
+    lines: [['input.value.trim()','get text, remove whitespace'],['if (text === "") return','guard clause blocks empty input'],['feedback.innerText','show the user what happened'],['input.focus()','cursor goes back to input']],
+    expected: ["Ready! Try adding tasks."],
+    tryit: "Click Run. Submit with spaces only. Then add real tasks."
+  },
+  {
+    title: "Enter key to submit",
+    concept: "Listen for <span class='cr'>keypress</span> and check <span class='cr'>e.key === \"Enter\"</span>. Same logic for both button click and Enter key.",
+    canvasHTML: '<div style="display:flex;gap:8px;margin-bottom:8px"><input id="taskInput" placeholder="Type and press Enter..." style="flex:1" /><button id="addBtn">Add</button></div>\n<ul id="list"></ul>\n<p id="status" style="font-size:12px;opacity:0.6;margin-top:8px"></p>',
+    code: `const input = document.querySelector("#taskInput");\nconst btn = document.querySelector("#addBtn");\nconst list = document.querySelector("#list");\nconst status = document.querySelector("#status");\n\nfunction addTask() {\n  const text = input.value.trim();\n  if (!text) return;\n  const li = document.createElement("li");\n  li.innerText = text;\n  list.appendChild(li);\n  input.value = "";\n  input.focus();\n  status.innerText = list.children.length + " tasks";\n  console.log("Added:", text);\n}\n\nbtn.addEventListener("click", addTask);\ninput.addEventListener("keypress", (e) => {\n  if (e.key === "Enter") addTask();\n});\n\nconsole.log("Ready! Type and press Enter (or click Add).");`,
+    lines: [['e.key === "Enter"','check if Enter was pressed'],['addTask()','same function for button and Enter'],['function addTask()','extracted for reuse'],['input.focus()','keeps cursor in input']],
+    expected: ["Ready! Type and press Enter (or click Add)."],
+    tryit: "Click Run. Add tasks using Enter, then using the button. Both work identically."
+  },
+  {
+    title: "Delete buttons per item",
+    concept: "Each task gets its own delete button. The closure remembers which <span class='cr'>li</span> to remove.",
+    canvasHTML: '<div style="display:flex;gap:8px;margin-bottom:8px"><input id="taskInput" placeholder="Add a task..." style="flex:1" /><button id="addBtn">Add</button></div>\n<ul id="list"></ul>',
+    code: `const input = document.querySelector("#taskInput");\nconst btn = document.querySelector("#addBtn");\nconst list = document.querySelector("#list");\n\nfunction addTask() {\n  const text = input.value.trim();\n  if (!text) return;\n  const li = document.createElement("li");\n  li.className = "task-row";\n  const span = document.createElement("span");\n  span.innerText = text;\n  span.style.flex = "1";\n  const delBtn = document.createElement("button");\n  delBtn.innerText = "X";\n  delBtn.className = "delete-btn";\n  delBtn.addEventListener("click", () => {\n    li.remove();\n    console.log("Deleted:", text);\n  });\n  li.appendChild(span);\n  li.appendChild(delBtn);\n  list.appendChild(li);\n  input.value = "";\n  input.focus();\n  console.log("Added:", text);\n}\n\nbtn.addEventListener("click", addTask);\ninput.addEventListener("keypress", e => { if (e.key === "Enter") addTask(); });\nconsole.log("Ready! Add tasks, click X to delete.");`,
+    lines: [['createElement("button")','create a delete button per task'],['delBtn.addEventListener','each button removes its own li'],['li.remove()','removes the entire task row'],['closure','callback remembers which li it belongs to']],
+    expected: ["Ready! Add tasks, click X to delete."],
+    tryit: "Add 3 tasks. Delete the middle one. Others stay because each button has its own closure."
+  },
+  {
+    title: "Toggle complete on click",
+    concept: "Click a task to mark it done. <span class='cr'>classList.toggle(\"completed\")</span> adds strikethrough. Click again to undo.",
+    canvasHTML: '<div style="display:flex;gap:8px;margin-bottom:8px"><input id="taskInput" placeholder="Add a task..." style="flex:1" /><button id="addBtn">Add</button></div>\n<ul id="list"></ul>\n<p id="counter" style="font-size:12px;opacity:0.6;margin-top:8px"></p>',
+    code: `const input = document.querySelector("#taskInput");\nconst btn = document.querySelector("#addBtn");\nconst list = document.querySelector("#list");\nconst counter = document.querySelector("#counter");\n\nfunction updateCounter() {\n  const total = list.children.length;\n  const done = list.querySelectorAll(".completed").length;\n  counter.innerText = done + "/" + total + " complete";\n}\n\nfunction addTask() {\n  const text = input.value.trim();\n  if (!text) return;\n  const li = document.createElement("li");\n  li.className = "task-row";\n  li.style.cursor = "pointer";\n  const span = document.createElement("span");\n  span.innerText = text;\n  span.style.flex = "1";\n  span.addEventListener("click", () => {\n    li.classList.toggle("completed");\n    updateCounter();\n    console.log(text, li.classList.contains("completed") ? "[done]" : "[active]");\n  });\n  const delBtn = document.createElement("button");\n  delBtn.innerText = "X";\n  delBtn.className = "delete-btn";\n  delBtn.addEventListener("click", () => { li.remove(); updateCounter(); });\n  li.appendChild(span);\n  li.appendChild(delBtn);\n  list.appendChild(li);\n  input.value = "";\n  input.focus();\n  updateCounter();\n}\n\nbtn.addEventListener("click", addTask);\ninput.addEventListener("keypress", e => { if (e.key === "Enter") addTask(); });\nconsole.log("Ready! Click task text to toggle done.");`,
+    lines: [['classList.toggle("completed")','add if absent, remove if present'],['querySelectorAll(".completed").length','count completed tasks'],['updateCounter()','called after every change'],['click span not li','so X button doesn\'t also toggle']],
+    expected: ["Ready! Click task text to toggle done."],
+    tryit: "Add tasks, click to mark done, click again to undo. Watch the counter."
+  },
+  {
+    title: "Complete to-do app",
+    concept: "The full app with clean, separated functions. <strong>This is a real, working to-do app</strong> — you built it step by step.",
+    canvasHTML: '<h3 style="margin-bottom:8px">To-Do App</h3>\n<div style="display:flex;gap:8px;margin-bottom:8px"><input id="taskInput" placeholder="What needs doing?" style="flex:1" /><button id="addBtn">Add</button><button id="clearBtn">Clear Done</button></div>\n<ul id="list"></ul>\n<p id="info" style="font-size:12px;opacity:0.6;margin-top:8px"></p>',
+    code: `const input = document.querySelector("#taskInput");\nconst addBtn = document.querySelector("#addBtn");\nconst clearBtn = document.querySelector("#clearBtn");\nconst list = document.querySelector("#list");\nconst info = document.querySelector("#info");\n\nfunction createTaskEl(text) {\n  const li = document.createElement("li");\n  li.className = "task-row";\n  li.style.cursor = "pointer";\n  const span = document.createElement("span");\n  span.innerText = text;\n  span.style.flex = "1";\n  span.addEventListener("click", () => { li.classList.toggle("completed"); updateInfo(); });\n  const del = document.createElement("button");\n  del.innerText = "X";\n  del.className = "delete-btn";\n  del.addEventListener("click", () => { li.remove(); updateInfo(); });\n  li.appendChild(span);\n  li.appendChild(del);\n  return li;\n}\n\nfunction addTask() {\n  const text = input.value.trim();\n  if (!text) return;\n  list.appendChild(createTaskEl(text));\n  input.value = "";\n  input.focus();\n  updateInfo();\n}\n\nfunction clearDone() {\n  list.querySelectorAll(".completed").forEach(li => li.remove());\n  updateInfo();\n}\n\nfunction updateInfo() {\n  const total = list.children.length;\n  const done = list.querySelectorAll(".completed").length;\n  info.innerText = total ? (total + " tasks, " + done + " done") : "No tasks yet";\n}\n\naddBtn.addEventListener("click", addTask);\nclearBtn.addEventListener("click", clearDone);\ninput.addEventListener("keypress", e => { if (e.key === "Enter") addTask(); });\nupdateInfo();\nconsole.log("Full to-do app ready!");`,
+    lines: [['createTaskEl(text)','separated function creates one task'],['addTask()','handles input + validation + adding'],['clearDone()','removes all completed at once'],['updateInfo()','updates status after any change']],
+    expected: ["Full to-do app ready!"],
+    tryit: "This is a complete working to-do app. Add tasks, mark done, clear completed. You built this!"
+  }
+];
+</script>
+<script src="engine.js"></script>
+</body>
+</html>

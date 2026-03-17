@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lesson 1 — Foundations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css" />
+</head>
+<body>
+<div></div>
+<script>
+window.LESSON_INFO = { num: "Lesson 1", name: "Foundations", prev: "00-setup.html", next: "02-data.html" };
+window.SLIDES = [
+  {
+    title: "Variables — let & const",
+    concept: "A variable is a named container for a value. Use <span class='cr'>let</span> when the value can change later. Use <span class='cr'>const</span> when it should stay fixed.",
+    code: "let score = 10;\nscore = 20;\nconsole.log(score);\n\nconst country = \"USA\";\nconsole.log(country);",
+    lines: [
+      ["let score = 10", "create a variable called score, set it to 10"],
+      ["score = 20", "update score to 20 (allowed with let)"],
+      ["console.log(score)", "print the current value of score"],
+      ["const country = \"USA\"", "create a constant — cannot be reassigned"],
+      ["console.log(country)", "print the country value"]
+    ],
+    expected: ["20", "USA"],
+    tryit: "Make a variable <strong>city</strong> with your city name and a <strong>year</strong> with a number. Print both."
+  },
+  {
+    title: "Data types — string, number, boolean",
+    concept: "Every value has a <strong>type</strong>. A <span class='cr'>string</span> is text (in quotes). A <span class='cr'>number</span> is numeric — no quotes. A <span class='cr'>boolean</span> is exactly <span class='cr'>true</span> or <span class='cr'>false</span>.",
+    code: "let greeting = \"Hello\";\nlet age = 23;\nlet isStudent = true;\n\nconsole.log(greeting);\nconsole.log(age);\nconsole.log(isStudent);\nconsole.log(typeof greeting);",
+    lines: [
+      ["let greeting = \"Hello\"", "a string — text wrapped in quotes"],
+      ["let age = 23", "a number — no quotes, used for math"],
+      ["let isStudent = true", "a boolean — only ever true or false"],
+      ["typeof greeting", "returns the type name as a string"]
+    ],
+    expected: ["Hello", "23", "true", "string"],
+    tryit: "Create one of each type: a <strong>string</strong>, a <strong>number</strong>, a <strong>boolean</strong>. Print them all."
+  },
+  {
+    title: "Arrays — storing a list",
+    concept: "An array holds an ordered list of values. Each item's position is its <strong>index</strong>, starting at <span class='cr'>0</span> — so the first item is <span class='cr'>[0]</span>, the second is <span class='cr'>[1]</span>, etc.",
+    code: "let words = [\"hi\", \"how\", \"are\", \"you\"];\n\nconsole.log(words[0]);\nconsole.log(words[3]);\nconsole.log(words.length);\n\nwords[1] = \"hello\";\nconsole.log(words);",
+    lines: [
+      ["let words = [...]", "create an array of 4 strings"],
+      ["words[0]", "index 0 = first item"],
+      ["words[3]", "index 3 = fourth item"],
+      ["words.length", "built-in property: number of items"],
+      ["words[1] = \"hello\"", "replace the item at index 1"]
+    ],
+    expected: ["hi", "you", "4", "[\"hi\",\"hello\",\"are\",\"you\"]"],
+    tryit: "Make an array of 4 color names. Print the first, the third, then change one item and print the whole array."
+  },
+  {
+    title: "Objects — grouping related data",
+    concept: "An object groups related values under named <strong>keys</strong>. Access values using dot notation: <span class='cr'>object.key</span>. You can also change a value the same way.",
+    code: "let person = {\n  name: \"Alice\",\n  age: 23,\n  city: \"Raleigh\"\n};\n\nconsole.log(person.name);\nconsole.log(person.age);\n\nperson.city = \"Durham\";\nconsole.log(person.city);",
+    lines: [
+      ["let person = {...}", "create an object with 3 key-value pairs"],
+      ["person.name", "dot notation accesses the 'name' key"],
+      ["person.age", "accesses the 'age' key"],
+      ["person.city = \"Durham\"", "reassign the 'city' key to a new value"]
+    ],
+    expected: ["Alice", "23", "Durham"],
+    tryit: "Make a <strong>book</strong> object with title, author, pages. Print the title. Change the page count. Print the whole object."
+  },
+  {
+    title: "Nested objects",
+    concept: "Object values can themselves be objects. Chain dot notation to reach deeper levels: <span class='cr'>person.address.city</span> means: go into person, go into address, get city.",
+    code: "let person = {\n  name: \"Alice\",\n  address: {\n    street: \"123 West St\",\n    city: \"Raleigh\"\n  }\n};\n\nconsole.log(person.address.city);\nconsole.log(person.address.street);\nconsole.log(person.name);",
+    lines: [
+      ["person = { address: {...} }", "the address value is itself an object"],
+      ["person.address.city", "go into person, then address, get city"],
+      ["person.address.street", "same pattern, different key"],
+      ["person.name", "top-level key — only one dot needed"]
+    ],
+    expected: ["Raleigh", "123 West St", "Alice"],
+    tryit: "Add a <strong>contact</strong> object inside person with <strong>email</strong> and <strong>phone</strong>. Print the email."
+  },
+  {
+    title: "Classes — object blueprints",
+    concept: "A class is a reusable template for objects. The <span class='cr'>constructor</span> sets up properties when you create a new instance. <span class='cr'>this</span> refers to the specific object being created.",
+    code: "class DriversLicense {\n  constructor(firstName, age, address) {\n    this.firstName = firstName;\n    this.age = age;\n    this.address = address;\n  }\n}\n\nlet alice = new DriversLicense(\"Alice\", 23, \"123 West St\");\nlet bob   = new DriversLicense(\"Bob\", 17, \"99 Oak Ave\");\n\nconsole.log(alice.firstName);\nconsole.log(bob.age);\nalice.address = \"456 South Lane\";\nconsole.log(alice.address);",
+    lines: [
+      ["class DriversLicense", "define a blueprint named DriversLicense"],
+      ["constructor(firstName, age, address)", "called automatically when using 'new'"],
+      ["this.firstName = firstName", "store the passed-in value on this object"],
+      ["new DriversLicense(...)", "create one specific instance from the blueprint"],
+      ["alice.address = \"...\"", "change only alice's copy — bob's is unchanged"]
+    ],
+    expected: ["Alice", "17", "456 South Lane"],
+    tryit: "Make a <strong>Book</strong> class with title, author, pages. Create two books and print one property from each."
+  },
+  {
+    title: "Functions — reusable actions",
+    concept: "A function is a named block of code you can call multiple times. <span class='cr'>return</span> sends a value back out. Parameters are the inputs — you pass in different values each call.",
+    code: "function greet(name) {\n  return \"Hello \" + name;\n}\n\nconsole.log(greet(\"Alice\"));\nconsole.log(greet(\"Bob\"));\n\nfunction square(n) {\n  return n * n;\n}\n\nconsole.log(square(4));\nconsole.log(square(10));",
+    lines: [
+      ["function greet(name)", "define a function with one input: name"],
+      ["return \"Hello \" + name", "combine strings, send result back to caller"],
+      ["greet(\"Alice\")", "call the function — 'name' becomes \"Alice\""],
+      ["function square(n)", "another function — takes a number"],
+      ["return n * n", "multiplies n by itself"]
+    ],
+    expected: ["Hello Alice", "Hello Bob", "16", "100"],
+    tryit: "Write a function <strong>double</strong> that takes a number and returns it x 2. Test with at least 3 values."
+  },
+  {
+    title: "Conditionals — if / else",
+    concept: "Conditionals let the program choose between paths. The code inside <span class='cr'>if</span> only runs when the condition is <span class='cr'>true</span>. Otherwise <span class='cr'>else</span> runs.",
+    code: "let age = 20;\n\nif (age >= 18) {\n  console.log(\"Adult\");\n} else {\n  console.log(\"Minor\");\n}\n\nlet temp = 90;\nif (temp > 80) {\n  console.log(\"Hot\");\n} else {\n  console.log(\"Not hot\");\n}",
+    lines: [
+      ["if (age >= 18)", "check: is age greater than or equal to 18?"],
+      ["console.log(\"Adult\")", "runs only if the condition is true"],
+      ["} else {", "this block runs only if condition is false"],
+      ["temp > 80", "second condition: is temp above 80?"]
+    ],
+    expected: ["Adult", "Hot"],
+    tryit: "Change age to 15 and run again. Add an <strong>else if</strong> branch for age >= 65 that prints \"Senior\"."
+  },
+  {
+    title: "Loops — repeating actions",
+    concept: "Loops run the same code multiple times. <span class='cr'>for...of</span> is the cleanest way to loop through every item in an array.",
+    code: "let names = [\"Alice\", \"Bob\", \"Carl\"];\n\nfor (let name of names) {\n  console.log(name);\n}\n\nfor (let i = 0; i < 3; i++) {\n  console.log(\"Count: \" + i);\n}",
+    lines: [
+      ["for (let name of names)", "each loop: 'name' becomes the next item"],
+      ["console.log(name)", "prints the current item"],
+      ["for (let i = 0; i < 3; i++)", "classic counter loop: start at 0, stop before 3"],
+      ["i++", "shorthand for i = i + 1 — advance the counter"]
+    ],
+    expected: ["Alice", "Bob", "Carl", "Count: 0", "Count: 1", "Count: 2"],
+    tryit: "Create an array of 4 foods. Loop through and print each one."
+  },
+  {
+    title: "All together — classes, arrays, loops",
+    concept: "Combine everything: define a class, create instances, store in an array, loop through with a conditional. This is the core pattern of real programs.",
+    code: "class Person {\n  constructor(name, age) {\n    this.name = name;\n    this.age = age;\n  }\n}\n\nlet people = [\n  new Person(\"Alice\", 23),\n  new Person(\"Bob\", 17),\n  new Person(\"Carl\", 30)\n];\n\nfor (let person of people) {\n  if (person.age >= 18) {\n    console.log(person.name + \" is an adult\");\n  } else {\n    console.log(person.name + \" is a minor\");\n  }\n}",
+    lines: [
+      ["class Person", "blueprint with name and age"],
+      ["new Person(\"Alice\", 23)", "create one Person instance"],
+      ["let people = [...]", "store all instances in an array"],
+      ["for (let person of people)", "loop through each Person object"],
+      ["if (person.age >= 18)", "check each person's age"]
+    ],
+    expected: ["Alice is an adult", "Bob is a minor", "Carl is an adult"],
+    tryit: "Add a <strong>city</strong> property to Person and print it alongside the adult/minor message."
+  }
+];
+</script>
+<script src="engine.js"></script>
+</body>
+</html>
