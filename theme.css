@@ -230,12 +230,31 @@ body > div.has-canvas {
   flex-shrink: 0;
 }
 
+/* ─── Priority dots ─── */
+.priority-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  cursor: help;
+  box-shadow: 0 0 4px currentColor;
+}
+
+.priority-dot.must-know { background: var(--color-green); color: var(--color-green); }
+.priority-dot.good-to-know { background: var(--color-amber); color: var(--color-amber); }
+.priority-dot.advanced { background: var(--color-accent); color: var(--color-accent); }
+.priority-dot.optional { background: var(--color-text-secondary); color: var(--color-text-secondary); }
+
 .slide-title {
   font-size: 16px;
   font-weight: 600;
   color: var(--color-text-primary);
   flex: 1;
   letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .progress {

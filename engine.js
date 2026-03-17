@@ -173,7 +173,19 @@ function render() {
   const total = window.SLIDES.length;
 
   document.getElementById("badge").textContent = `Step ${cSlide + 1}`;
-  document.getElementById("title").textContent = s.title;
+
+  // Parse priority label from title and render as colored dot
+  let titleText = s.title;
+  let dotHTML = '';
+  const priorityLabels = { '[MUST KNOW]': 'must-know', '[GOOD TO KNOW]': 'good-to-know', '[ADVANCED]': 'advanced', '[OPTIONAL]': 'optional' };
+  for (const [label, cls] of Object.entries(priorityLabels)) {
+    if (titleText.startsWith(label)) {
+      titleText = titleText.slice(label.length).trim();
+      dotHTML = `<span class="priority-dot ${cls}" title="${label.slice(1, -1)}"></span> `;
+      break;
+    }
+  }
+  document.getElementById("title").innerHTML = dotHTML + titleText;
   document.getElementById("progress").textContent = `${cSlide + 1} / ${total}`;
   document.getElementById("concept").innerHTML = s.concept;
   document.getElementById("editor").value = s.code;
