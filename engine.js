@@ -235,7 +235,7 @@ function render() {
   }
 }
 
-function runCode() {
+async function runCode() {
   const code = document.getElementById("editor").value;
   const outEl = document.getElementById("output");
   const lines = [];
@@ -253,7 +253,9 @@ function runCode() {
   };
 
   try {
-    new Function(code)();
+    const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+    const fn = new AsyncFunction(code);
+    await fn();
     if (!lines.length) lines.push("(no output)");
   } catch (e) {
     lines.push("Error: " + e.message);

@@ -2,6 +2,20 @@
 
 Interactive JavaScript lessons for complete beginners. Everything runs in the browser — no installs needed.
 
+## Installing Git (Mac)
+
+If you don't have Git installed, open Terminal and run:
+
+```bash
+xcode-select --install
+```
+
+Click "Install" when prompted. This installs Git along with other developer tools. Verify with:
+
+```bash
+git --version
+```
+
 ## Get Started
 
 ```bash

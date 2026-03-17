@@ -66,6 +66,20 @@ window.SLIDES = [
     tryit: "Add a variable <strong>loading</strong> that is true before fetch and false after. Log it at each stage."
   },
   {
+    title: "[MUST KNOW] Real API — fetch from the internet",
+    concept: "<strong>This uses a real API.</strong> jsonplaceholder.typicode.com is a free, public API for testing. When you click Run, your browser makes a real network request and gets real data back.<br><br>This is exactly how real apps work — fetch a URL, get JSON, use the data.",
+    code: "// This is a REAL API call — not simulated!\nconst response = await fetch(\"https://jsonplaceholder.typicode.com/todos/1\");\nconst todo = await response.json();\n\nconsole.log(\"Title:\", todo.title);\nconsole.log(\"Completed:\", todo.completed);\nconsole.log(\"Full object:\", todo);\n\n// Try another endpoint — a user\nconst res2 = await fetch(\"https://jsonplaceholder.typicode.com/users/1\");\nconst user = await res2.json();\n\nconsole.log(\"User:\", user.name);\nconsole.log(\"Email:\", user.email);",
+    lines: [
+      ["fetch(\"https://...\")", "sends a real HTTP request to the API server"],
+      ["await response.json()", "parses the JSON response into a JS object"],
+      ["todo.title", "access data just like any object"],
+      ["/todos/1", "the /1 means 'get the item with ID 1'"],
+      ["/users/1", "same pattern, different data type"]
+    ],
+    expected: ["Title: delectus aut autem", "Completed: false", "Full object: {userId:1,id:1,title:\"delectus aut autem\",completed:false}", "User: Leanne Graham", "Email: Sincere@april.biz"],
+    tryit: "Try changing the ID in the URL (e.g., /todos/5 or /users/3). Each ID returns different data. Try fetching /posts/1 for a blog post."
+  },
+  {
     title: "[MUST KNOW] Error handling with try/catch",
     concept: "Network requests can fail. try/catch lets you handle failures gracefully instead of crashing the app.<br><br>Network requests can fail: no internet, bad URL, server error. <span class='cr'>try/catch</span> lets you handle failures gracefully instead of crashing.",
     code: "function fakeFetch(shouldFail) {\n  if (shouldFail) return Promise.reject(new Error(\"Network error\"));\n  return Promise.resolve({ json: () => ({ data: \"Success!\" }) });\n}\n\nasync function getData(shouldFail) {\n  try {\n    console.log(\"Fetching...\");\n    const response = await fakeFetch(shouldFail);\n    const data = await response.json();\n    console.log(\"Got:\", data.data);\n  } catch (error) {\n    console.log(\"Error:\", error.message);\n  }\n}\n\ngetData(false);\ngetData(true);",
