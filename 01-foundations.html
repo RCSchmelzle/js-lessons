@@ -14,8 +14,8 @@
 window.LESSON_INFO = { num: "Lesson 1", name: "Foundations", prev: "00-setup.html", next: "02-data.html" };
 window.SLIDES = [
   {
-    title: "Variables — let & const",
-    concept: "A variable is a named container for a value. Use <span class='cr'>let</span> when the value can change later. Use <span class='cr'>const</span> when it should stay fixed.",
+    title: "[MUST KNOW] Variables — let & const",
+    concept: "<strong>What it is:</strong> A variable is a named container for a value.<br><strong>Why this matters:</strong> Every program stores and updates data — variables are how you do it.<ul><li>Use <span class='cr'>let</span> when the value can change later.</li><li>Use <span class='cr'>const</span> when it should stay fixed.</li><li>Rule of thumb: use const by default, use let only if you need to reassign.</li></ul><div style=\"margin-top:8px;padding:6px 10px;background:rgba(248,113,113,0.08);border-left:3px solid var(--color-red);border-radius:4px;font-size:12px\"><strong>Common mistake:</strong> Using let everywhere instead of const. const prevents accidental reassignment.</div>",
     code: "let score = 10;\nscore = 20;\nconsole.log(score);\n\nconst country = \"USA\";\nconsole.log(country);",
     lines: [
       ["let score = 10", "create a variable called score, set it to 10"],
@@ -28,8 +28,8 @@ window.SLIDES = [
     tryit: "Make a variable <strong>city</strong> with your city name and a <strong>year</strong> with a number. Print both."
   },
   {
-    title: "Data types — string, number, boolean",
-    concept: "Every value has a <strong>type</strong>. A <span class='cr'>string</span> is text (in quotes). A <span class='cr'>number</span> is numeric — no quotes. A <span class='cr'>boolean</span> is exactly <span class='cr'>true</span> or <span class='cr'>false</span>.",
+    title: "[MUST KNOW] Data types — string, number, boolean",
+    concept: "<strong>Mental model:</strong> JavaScript stores values, and data types tell the computer how to interpret those values.<br><strong>What it is:</strong> Every value has a <strong>type</strong>.<br><strong>Why this matters:</strong> Knowing types prevents bugs when combining or comparing values.<ul><li>A <span class='cr'>string</span> is text (in quotes).</li><li>A <span class='cr'>number</span> is numeric — no quotes.</li><li>A <span class='cr'>boolean</span> is exactly <span class='cr'>true</span> or <span class='cr'>false</span>.</li></ul><div style=\"margin-top:8px;padding:6px 10px;background:rgba(248,113,113,0.08);border-left:3px solid var(--color-red);border-radius:4px;font-size:12px\"><strong>Common mistake:</strong> Mixing up strings and numbers. '5' + 1 gives '51' (string), not 6.</div>",
     code: "let greeting = \"Hello\";\nlet age = 23;\nlet isStudent = true;\n\nconsole.log(greeting);\nconsole.log(age);\nconsole.log(isStudent);\nconsole.log(typeof greeting);",
     lines: [
       ["let greeting = \"Hello\"", "a string — text wrapped in quotes"],
@@ -41,8 +41,8 @@ window.SLIDES = [
     tryit: "Create one of each type: a <strong>string</strong>, a <strong>number</strong>, a <strong>boolean</strong>. Print them all."
   },
   {
-    title: "Arrays — storing a list",
-    concept: "An array holds an ordered list of values. Each item's position is its <strong>index</strong>, starting at <span class='cr'>0</span> — so the first item is <span class='cr'>[0]</span>, the second is <span class='cr'>[1]</span>, etc.",
+    title: "[MUST KNOW] Arrays — storing a list",
+    concept: "<strong>What it is:</strong> An array holds an ordered list of values.<br><strong>Why this matters:</strong> Arrays are how you store collections of data. Almost every app uses them.<ul><li>Each item's position is its <strong>index</strong>, starting at <span class='cr'>0</span>.</li><li>The first item is <span class='cr'>[0]</span>, the second is <span class='cr'>[1]</span>, etc.</li></ul><div style=\"margin-top:8px;padding:6px 10px;background:rgba(248,113,113,0.08);border-left:3px solid var(--color-red);border-radius:4px;font-size:12px\"><strong>Common mistake:</strong> Forgetting arrays start at index 0, not 1.</div>",
     code: "let words = [\"hi\", \"how\", \"are\", \"you\"];\n\nconsole.log(words[0]);\nconsole.log(words[3]);\nconsole.log(words.length);\n\nwords[1] = \"hello\";\nconsole.log(words);",
     lines: [
       ["let words = [...]", "create an array of 4 strings"],
@@ -55,8 +55,8 @@ window.SLIDES = [
     tryit: "Make an array of 4 color names. Print the first, the third, then change one item and print the whole array."
   },
   {
-    title: "Objects — grouping related data",
-    concept: "An object groups related values under named <strong>keys</strong>. Access values using dot notation: <span class='cr'>object.key</span>. You can also change a value the same way.",
+    title: "[MUST KNOW] Objects — grouping related data",
+    concept: "<strong>What it is:</strong> An object groups related values under named <strong>keys</strong>.<br><strong>Why this matters:</strong> Objects let you group related data together. Real apps represent users, products, etc. as objects.<ul><li>Access values using dot notation: <span class='cr'>object.key</span>.</li><li>You can also change a value the same way.</li></ul><div style=\"margin-top:8px;padding:6px 10px;background:rgba(248,113,113,0.08);border-left:3px solid var(--color-red);border-radius:4px;font-size:12px\"><strong>Common mistake:</strong> Forgetting dot notation — writing user[name] instead of user.name or user['name'].</div>",
     code: "let person = {\n  name: \"Alice\",\n  age: 23,\n  city: \"Raleigh\"\n};\n\nconsole.log(person.name);\nconsole.log(person.age);\n\nperson.city = \"Durham\";\nconsole.log(person.city);",
     lines: [
       ["let person = {...}", "create an object with 3 key-value pairs"],
@@ -68,7 +68,7 @@ window.SLIDES = [
     tryit: "Make a <strong>book</strong> object with title, author, pages. Print the title. Change the page count. Print the whole object."
   },
   {
-    title: "Nested objects",
+    title: "[GOOD TO KNOW] Nested objects",
     concept: "Object values can themselves be objects. Chain dot notation to reach deeper levels: <span class='cr'>person.address.city</span> means: go into person, go into address, get city.",
     code: "let person = {\n  name: \"Alice\",\n  address: {\n    street: \"123 West St\",\n    city: \"Raleigh\"\n  }\n};\n\nconsole.log(person.address.city);\nconsole.log(person.address.street);\nconsole.log(person.name);",
     lines: [
@@ -81,8 +81,8 @@ window.SLIDES = [
     tryit: "Add a <strong>contact</strong> object inside person with <strong>email</strong> and <strong>phone</strong>. Print the email."
   },
   {
-    title: "Classes — object blueprints",
-    concept: "A class is a reusable template for objects. The <span class='cr'>constructor</span> sets up properties when you create a new instance. <span class='cr'>this</span> refers to the specific object being created.",
+    title: "[ADVANCED] Classes — object blueprints",
+    concept: "<strong>What it is:</strong> A class is a reusable template for objects.<br><strong>Why this matters:</strong> Classes let you create many objects with the same shape without repeating yourself.<ul><li>The <span class='cr'>constructor</span> sets up properties when you create a new instance.</li><li><span class='cr'>this</span> refers to the specific object being created.</li></ul><em>Note: In modern JS, simple objects and functions are often used instead of classes. Classes are helpful but not required for most frontend interviews.</em>",
     code: "class DriversLicense {\n  constructor(firstName, age, address) {\n    this.firstName = firstName;\n    this.age = age;\n    this.address = address;\n  }\n}\n\nlet alice = new DriversLicense(\"Alice\", 23, \"123 West St\");\nlet bob   = new DriversLicense(\"Bob\", 17, \"99 Oak Ave\");\n\nconsole.log(alice.firstName);\nconsole.log(bob.age);\nalice.address = \"456 South Lane\";\nconsole.log(alice.address);",
     lines: [
       ["class DriversLicense", "define a blueprint named DriversLicense"],
@@ -95,8 +95,8 @@ window.SLIDES = [
     tryit: "Make a <strong>Book</strong> class with title, author, pages. Create two books and print one property from each."
   },
   {
-    title: "Functions — reusable actions",
-    concept: "A function is a named block of code you can call multiple times. <span class='cr'>return</span> sends a value back out. Parameters are the inputs — you pass in different values each call.",
+    title: "[MUST KNOW] Functions — reusable actions",
+    concept: "<strong>Mental model:</strong> Functions = reusable blocks of logic. They take input (parameters) and return output.<br><strong>What it is:</strong> A function is a named block of code you can call multiple times.<br><strong>Why this matters:</strong> Functions let you avoid repeating code and organize logic into clear, testable pieces.<ul><li><span class='cr'>return</span> sends a value back out.</li><li>Parameters are the inputs — you pass in different values each call.</li></ul><div style=\"margin-top:8px;padding:6px 10px;background:rgba(248,113,113,0.08);border-left:3px solid var(--color-red);border-radius:4px;font-size:12px\"><strong>Common mistake:</strong> Forgetting to return a value — the function runs but gives back undefined.</div>",
     code: "function greet(name) {\n  return \"Hello \" + name;\n}\n\nconsole.log(greet(\"Alice\"));\nconsole.log(greet(\"Bob\"));\n\nfunction square(n) {\n  return n * n;\n}\n\nconsole.log(square(4));\nconsole.log(square(10));",
     lines: [
       ["function greet(name)", "define a function with one input: name"],
@@ -109,8 +109,8 @@ window.SLIDES = [
     tryit: "Write a function <strong>double</strong> that takes a number and returns it x 2. Test with at least 3 values."
   },
   {
-    title: "Conditionals — if / else",
-    concept: "Conditionals let the program choose between paths. The code inside <span class='cr'>if</span> only runs when the condition is <span class='cr'>true</span>. Otherwise <span class='cr'>else</span> runs.",
+    title: "[MUST KNOW] Conditionals — if / else",
+    concept: "<strong>What it is:</strong> Conditionals let the program choose between paths.<br><strong>Why this matters:</strong> Conditionals let your program make decisions.<ul><li>The code inside <span class='cr'>if</span> only runs when the condition is <span class='cr'>true</span>.</li><li>Otherwise <span class='cr'>else</span> runs.</li></ul><div style=\"margin-top:8px;padding:6px 10px;background:rgba(248,113,113,0.08);border-left:3px solid var(--color-red);border-radius:4px;font-size:12px\"><strong>Common mistake:</strong> Using = (assignment) instead of === (comparison) in conditions.</div>",
     code: "let age = 20;\n\nif (age >= 18) {\n  console.log(\"Adult\");\n} else {\n  console.log(\"Minor\");\n}\n\nlet temp = 90;\nif (temp > 80) {\n  console.log(\"Hot\");\n} else {\n  console.log(\"Not hot\");\n}",
     lines: [
       ["if (age >= 18)", "check: is age greater than or equal to 18?"],
@@ -122,8 +122,8 @@ window.SLIDES = [
     tryit: "Change age to 15 and run again. Add an <strong>else if</strong> branch for age >= 65 that prints \"Senior\"."
   },
   {
-    title: "Loops — repeating actions",
-    concept: "Loops run the same code multiple times. <span class='cr'>for...of</span> is the cleanest way to loop through every item in an array.",
+    title: "[MUST KNOW] Loops — repeating actions",
+    concept: "<strong>What it is:</strong> Loops run the same code multiple times.<br><strong>Why this matters:</strong> Most loops are used to go through arrays.<ul><li><span class='cr'>for...of</span> is the cleanest way to loop through every item in an array.</li><li>Classic <span class='cr'>for</span> loops use a counter variable.</li></ul><div style=\"margin-top:8px;padding:6px 10px;background:rgba(248,113,113,0.08);border-left:3px solid var(--color-red);border-radius:4px;font-size:12px\"><strong>Common mistake:</strong> Off-by-one errors — using <= instead of < in loop conditions.</div>",
     code: "let names = [\"Alice\", \"Bob\", \"Carl\"];\n\nfor (let name of names) {\n  console.log(name);\n}\n\nfor (let i = 0; i < 3; i++) {\n  console.log(\"Count: \" + i);\n}",
     lines: [
       ["for (let name of names)", "each loop: 'name' becomes the next item"],
@@ -135,8 +135,8 @@ window.SLIDES = [
     tryit: "Create an array of 4 foods. Loop through and print each one."
   },
   {
-    title: "All together — classes, arrays, loops",
-    concept: "Combine everything: define a class, create instances, store in an array, loop through with a conditional. This is the core pattern of real programs.",
+    title: "Putting it all together",
+    concept: "<strong>What it is:</strong> Combine everything: define a class, create instances, store in an array, loop through with a conditional.<br><strong>Why this matters:</strong> This is the core pattern of real programs: define data structures, store in arrays, loop through with logic.",
     code: "class Person {\n  constructor(name, age) {\n    this.name = name;\n    this.age = age;\n  }\n}\n\nlet people = [\n  new Person(\"Alice\", 23),\n  new Person(\"Bob\", 17),\n  new Person(\"Carl\", 30)\n];\n\nfor (let person of people) {\n  if (person.age >= 18) {\n    console.log(person.name + \" is an adult\");\n  } else {\n    console.log(person.name + \" is a minor\");\n  }\n}",
     lines: [
       ["class Person", "blueprint with name and age"],

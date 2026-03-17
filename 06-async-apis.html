@@ -14,8 +14,8 @@
 window.LESSON_INFO = { num: "Lesson 6", name: "Async & APIs", prev: "05-events-forms.html", next: "07-scope-closures.html" };
 window.SLIDES = [
   {
-    title: "Async code — the big idea",
-    concept: "So far, code runs top to bottom instantly. But some things take time: loading data, waiting for a server. That's <strong>asynchronous behavior</strong>. JS doesn't wait — it keeps going and comes back later.",
+    title: "[MUST KNOW] Async code — the big idea",
+    concept: "<strong>Mental model:</strong> Async code lets JavaScript do things that take time (like fetching data) without freezing the page. JS doesn't wait — it keeps going and comes back later.<br><br>So far, code runs top to bottom instantly. But some things take time: loading data, waiting for a server. That's <strong>asynchronous behavior</strong>. JS doesn't wait — it keeps going and comes back later.<div style=\"margin-top:8px;padding:6px 10px;background:rgba(248,113,113,0.08);border-left:3px solid var(--color-red);border-radius:4px;font-size:12px\"><strong>Common mistake:</strong> Expecting async code to run in order. setTimeout callback runs AFTER the code below it, not before.</div>",
     code: "console.log(\"Start\");\n\nsetTimeout(() => {\n  console.log(\"Later (after 1 second)\");\n}, 1000);\n\nconsole.log(\"End\");",
     lines: [
       ["console.log(\"Start\")", "runs immediately"],
@@ -27,8 +27,8 @@ window.SLIDES = [
     tryit: "Add another setTimeout with 500ms. Predict the order before running."
   },
   {
-    title: "What is an API?",
-    concept: "An API is a way to get data from somewhere else. It usually returns <strong>JSON</strong> — which looks just like a JavaScript object. APIs power weather apps, social feeds, everything.",
+    title: "[MUST KNOW] What is an API?",
+    concept: "<strong>Mental model:</strong> An API is a way to get data from somewhere else. It returns JSON — which is just JavaScript objects written as text.<br><br><strong>Key concept:</strong> JSON.parse() turns text into an object. JSON.stringify() turns an object into text.<br><br>An API is a way to get data from somewhere else. It usually returns <strong>JSON</strong> — which looks just like a JavaScript object. APIs power weather apps, social feeds, everything.",
     code: "// Simulated API response (this is what JSON looks like)\nlet response = {\n  quote: \"The only way to do great work is to love what you do.\",\n  author: \"Steve Jobs\"\n};\n\nconsole.log(\"Quote:\", response.quote);\nconsole.log(\"Author:\", response.author);\n\n// JSON is just text that becomes an object\nlet jsonText = '{\"name\":\"Alice\",\"age\":23}';\nlet parsed = JSON.parse(jsonText);\nconsole.log(parsed.name);",
     lines: [
       ["response.quote", "access data from the API response object"],
@@ -40,8 +40,8 @@ window.SLIDES = [
     tryit: "Create your own JSON string with 3 properties. Parse it and print each one."
   },
   {
-    title: "fetch() — requesting data",
-    concept: "<span class='cr'>fetch()</span> sends a request to a URL and returns a Promise. The <span class='cr'>.then()</span> chain processes the response. This is the older style — we'll upgrade to async/await next.",
+    title: "[MUST KNOW] fetch() — requesting data",
+    concept: "fetch() sends a request to a URL. The response comes back as a Promise — an object representing a future value.<br><br><span class='cr'>fetch()</span> sends a request to a URL and returns a Promise. The <span class='cr'>.then()</span> chain processes the response. This is the older style — we'll upgrade to async/await next.<div style=\"margin-top:8px;padding:6px 10px;background:rgba(248,113,113,0.08);border-left:3px solid var(--color-red);border-radius:4px;font-size:12px\"><strong>Common mistake:</strong> Forgetting the second .then() — the first gives you the response object, the second gives you the actual data.</div>",
     code: "// Simulating fetch with a Promise\nfunction fakeFetch(url) {\n  return new Promise(resolve => {\n    console.log(\"Fetching:\", url);\n    resolve({ json: () => ({ quote: \"Stay hungry, stay foolish\", author: \"Steve Jobs\" }) });\n  });\n}\n\nfakeFetch(\"https://api.example.com/quote\")\n  .then(response => response.json())\n  .then(data => {\n    console.log(data.quote);\n    console.log(\"—\", data.author);\n  });",
     lines: [
       ["fetch(url)", "send a request to the URL"],
@@ -53,8 +53,8 @@ window.SLIDES = [
     tryit: "Add a <span class='cr'>.catch(err => console.log(err))</span> at the end of the chain for error handling."
   },
   {
-    title: "async/await — the modern way",
-    concept: "<span class='cr'>async/await</span> makes asynchronous code look like normal code. <span class='cr'>await</span> pauses until the result is ready. Much cleaner than <span class='cr'>.then()</span> chains.",
+    title: "[MUST KNOW] async/await — the modern way",
+    concept: "<strong>Mental model:</strong> async/await makes asynchronous code look like normal code. await = 'pause here until the result is ready.'<br><br><span class='cr'>async/await</span> makes asynchronous code look like normal code. <span class='cr'>await</span> pauses until the result is ready. Much cleaner than <span class='cr'>.then()</span> chains.<br><br><strong>Interview tip:</strong> If asked about async, explain: 'async marks a function as asynchronous, await pauses until a Promise resolves.'<div style=\"margin-top:8px;padding:6px 10px;background:rgba(248,113,113,0.08);border-left:3px solid var(--color-red);border-radius:4px;font-size:12px\"><strong>Common mistake:</strong> Forgetting the 'await' keyword before fetch — you get a Promise object instead of the actual data.</div>",
     code: "function fakeFetch(url) {\n  return Promise.resolve({\n    json: () => ({ quote: \"Think different.\", author: \"Apple\" })\n  });\n}\n\nasync function getQuote() {\n  console.log(\"Fetching...\");\n  const response = await fakeFetch(\"https://api.example.com/quote\");\n  const data = await response.json();\n  console.log(data.quote);\n  console.log(\"—\", data.author);\n}\n\ngetQuote();",
     lines: [
       ["async function", "marks the function as asynchronous"],
@@ -66,8 +66,8 @@ window.SLIDES = [
     tryit: "Add a variable <strong>loading</strong> that is true before fetch and false after. Log it at each stage."
   },
   {
-    title: "Error handling with try/catch",
-    concept: "Network requests can fail: no internet, bad URL, server error. <span class='cr'>try/catch</span> lets you handle failures gracefully instead of crashing.",
+    title: "[MUST KNOW] Error handling with try/catch",
+    concept: "Network requests can fail. try/catch lets you handle failures gracefully instead of crashing the app.<br><br>Network requests can fail: no internet, bad URL, server error. <span class='cr'>try/catch</span> lets you handle failures gracefully instead of crashing.",
     code: "function fakeFetch(shouldFail) {\n  if (shouldFail) return Promise.reject(new Error(\"Network error\"));\n  return Promise.resolve({ json: () => ({ data: \"Success!\" }) });\n}\n\nasync function getData(shouldFail) {\n  try {\n    console.log(\"Fetching...\");\n    const response = await fakeFetch(shouldFail);\n    const data = await response.json();\n    console.log(\"Got:\", data.data);\n  } catch (error) {\n    console.log(\"Error:\", error.message);\n  }\n}\n\ngetData(false);\ngetData(true);",
     lines: [
       ["try { ... }", "attempt this code"],
@@ -79,8 +79,8 @@ window.SLIDES = [
     tryit: "Add a <strong>finally</strong> block that logs <strong>\"Done\"</strong> regardless of success or failure."
   },
   {
-    title: "Loading states — better UX",
-    concept: "Users need feedback while waiting. Set a loading message before fetching, clear it when done. This is the <strong>standard pattern</strong> in every real app.",
+    title: "[GOOD TO KNOW] Loading states — better UX",
+    concept: "Users need feedback while waiting. Show 'Loading...' before the fetch, update when done.<br><br>Users need feedback while waiting. Set a loading message before fetching, clear it when done. This is the <strong>standard pattern</strong> in every real app.",
     code: "let display = { text: \"\" };\n\nasync function loadQuote() {\n  display.text = \"Loading...\";\n  console.log(\"UI:\", display.text);\n\n  // Simulate network delay\n  await new Promise(r => setTimeout(r, 100));\n\n  try {\n    display.text = \"The best way to predict the future is to create it.\";\n    console.log(\"UI:\", display.text);\n  } catch (e) {\n    display.text = \"Failed to load\";\n    console.log(\"UI:\", display.text);\n  }\n}\n\nloadQuote();",
     lines: [
       ["display.text = \"Loading...\"", "show loading state immediately"],
@@ -92,8 +92,8 @@ window.SLIDES = [
     tryit: "Add a <strong>disabled</strong> flag on the button during loading to prevent double-clicks."
   },
   {
-    title: "The async app pattern",
-    concept: "Every API-powered app follows this flow: <strong>user action, loading state, fetch data, update UI, handle errors</strong>. Master this pattern and you can build anything.",
+    title: "[MUST KNOW] The async app pattern",
+    concept: "Every API-powered app follows this flow: user action, loading state, fetch data, update UI, handle errors. Master this pattern and you can build anything.<br><br>Every API-powered app follows this flow: <strong>user action, loading state, fetch data, update UI, handle errors</strong>. Master this pattern and you can build anything.",
     code: "let state = { loading: false, data: null, error: null };\n\nfunction fakeFetch() {\n  return Promise.resolve({ title: \"Learn JS\", completed: false });\n}\n\nasync function fetchTodo() {\n  state.loading = true;\n  state.error = null;\n  console.log(\"State:\", JSON.stringify(state));\n\n  try {\n    let response = await fakeFetch();\n    state.data = response;\n    console.log(\"State:\", JSON.stringify(state));\n  } catch (e) {\n    state.error = e.message;\n  } finally {\n    state.loading = false;\n    console.log(\"Final:\", JSON.stringify(state));\n  }\n}\n\nfetchTodo();",
     lines: [
       ["state object", "tracks loading, data, and error in one place"],

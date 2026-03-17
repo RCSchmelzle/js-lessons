@@ -14,8 +14,8 @@
 window.LESSON_INFO = { num: "Lesson 8", name: "Bootstrap", prev: "07-scope-closures.html", next: "09-debugging.html" };
 window.SLIDES = [
   {
-    title: "What is Bootstrap?",
-    concept: "Bootstrap is a <strong>CSS framework</strong> — a collection of pre-made styles you apply with class names. Instead of writing CSS from scratch, you add classes like <span class='cr'>btn btn-primary</span> and get a styled button instantly.",
+    title: "[OPTIONAL] What is Bootstrap?",
+    concept: "Bootstrap is a CSS framework -- it handles styling so you can focus on JavaScript. It changes how things look, not how they work.<br><br>Bootstrap is a <strong>CSS framework</strong> -- a collection of pre-made styles you apply with class names. Instead of writing CSS from scratch, you add classes like <span class='cr'>btn btn-primary</span> and get a styled button instantly.",
     code: "// Bootstrap is just CSS classes.\n// You don't write CSS — you add classes to HTML.\n\n// Plain HTML button:\n// <button>Click me</button>\n\n// Bootstrap button:\n// <button class=\"btn btn-primary\">Click me</button>\n\n// The difference is ONLY styling.\n// Your JavaScript stays exactly the same.\n\nlet btn = { className: \"btn btn-primary\" };\nconsole.log(\"Button classes:\", btn.className);\nconsole.log(\"JS doesn't change — only the HTML classes do\");",
     lines: [
       ["btn btn-primary", "Bootstrap classes: btn = base style, btn-primary = blue color"],
@@ -27,8 +27,8 @@ window.SLIDES = [
     tryit: "Look up Bootstrap's button classes. How would you make a red button? A green one? A large one?"
   },
   {
-    title: "Adding Bootstrap to your project",
-    concept: "Add one line inside <span class='cr'>&lt;head&gt;</span> and you're done. No install, no setup — it loads from a CDN (content delivery network).",
+    title: "[OPTIONAL] Adding Bootstrap to your project",
+    concept: "Add one line inside <span class='cr'>&lt;head&gt;</span> and you're done. No install, no setup -- it loads from a CDN (content delivery network).",
     code: "// Add this ONE line inside <head> of your HTML:\n//\n// <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css\" rel=\"stylesheet\">\n//\n// That's it. Now all Bootstrap classes work.\n\nlet setup = {\n  method: \"CDN link in <head>\",\n  install: \"none required\",\n  fileChanges: \"only HTML classes\"\n};\n\nconsole.log(\"Setup method:\", setup.method);\nconsole.log(\"Install needed:\", setup.install);\nconsole.log(\"What changes:\", setup.fileChanges);",
     lines: [
       ["CDN", "loads Bootstrap from the internet — no download needed"],
@@ -40,7 +40,7 @@ window.SLIDES = [
     tryit: "Add the Bootstrap CDN link to your index.html. Then add <span class='cr'>class=\"btn btn-primary\"</span> to a button and see the difference."
   },
   {
-    title: "Container and spacing",
+    title: "[OPTIONAL] Container and spacing",
     concept: "<span class='cr'>container</span> centers your content with max-width. Spacing classes like <span class='cr'>mt-3</span> (margin-top) and <span class='cr'>p-3</span> (padding) replace manual CSS spacing.",
     code: "// Bootstrap spacing uses a simple system:\n// m = margin, p = padding\n// t = top, b = bottom, x = horizontal, y = vertical\n// 0-5 = size (0 = none, 5 = largest)\n\nlet spacingExamples = {\n  \"mt-3\": \"margin-top: medium\",\n  \"mb-5\": \"margin-bottom: extra large\",\n  \"p-3\":  \"padding: medium (all sides)\",\n  \"px-4\": \"padding left+right: large\",\n  \"my-2\": \"margin top+bottom: small\"\n};\n\nfor (let [cls, meaning] of Object.entries(spacingExamples)) {\n  console.log(cls + \" → \" + meaning);\n}\n\nconsole.log(\"\\nLayout:\");\nconsole.log(\"container → centers content, sets max-width\");\nconsole.log(\"container-fluid → full width\");",
     lines: [
@@ -53,7 +53,7 @@ window.SLIDES = [
     tryit: "Wrap your app in a <span class='cr'>&lt;div class=\"container mt-5\"&gt;</span>. See how it centers and adds space."
   },
   {
-    title: "Buttons, inputs, and lists",
+    title: "[OPTIONAL] Buttons, inputs, and lists",
     concept: "The three components you'll use most: <strong>buttons</strong> (<span class='cr'>btn btn-*</span>), <strong>inputs</strong> (<span class='cr'>form-control</span>), and <strong>lists</strong> (<span class='cr'>list-group</span>). These instantly make your app look professional.",
     code: "// Button variants:\nlet buttons = [\n  \"btn btn-primary   → blue\",\n  \"btn btn-success   → green\",\n  \"btn btn-danger    → red\",\n  \"btn btn-warning   → yellow\",\n  \"btn btn-outline-primary → blue outline\",\n  \"btn btn-sm        → small size\",\n  \"btn btn-lg        → large size\"\n];\n\nconsole.log(\"BUTTONS:\");\nbuttons.forEach(b => console.log(\"  \" + b));\n\nconsole.log(\"\\nINPUTS:\");\nconsole.log(\"  form-control → styled text input\");\nconsole.log(\"  form-control mb-2 → input with margin below\");\n\nconsole.log(\"\\nLISTS:\");\nconsole.log(\"  list-group → the container <ul>\");\nconsole.log(\"  list-group-item → each <li>\");",
     lines: [
@@ -66,7 +66,7 @@ window.SLIDES = [
     tryit: "Update your to-do app: add <span class='cr'>form-control</span> to the input, <span class='cr'>btn btn-success</span> to the add button, and <span class='cr'>list-group</span>/<span class='cr'>list-group-item</span> to the list."
   },
   {
-    title: "Grid layout — rows and columns",
+    title: "[OPTIONAL] Grid layout -- rows and columns",
     concept: "Bootstrap's grid divides the page into <strong>12 columns</strong>. Use <span class='cr'>row</span> and <span class='cr'>col</span> classes to create layouts. Columns auto-size, or you can specify widths like <span class='cr'>col-6</span> (half).",
     code: "// Grid system: 12 columns total\n\nlet layouts = [\n  {\n    name: \"Equal halves\",\n    cols: \"6 + 6 = 12\"\n  },\n  {\n    name: \"Sidebar + main\",\n    cols: \"3 + 9 = 12\"\n  },\n  {\n    name: \"Three equal\",\n    cols: \"4 + 4 + 4 = 12\"\n  }\n];\n\nlayouts.forEach(l => {\n  console.log(l.name + \" (\" + l.cols + \")\");\n});",
     lines: [
@@ -79,8 +79,8 @@ window.SLIDES = [
     tryit: "Create a two-column layout: left side has the input+button, right side has the task list."
   },
   {
-    title: "Upgrading your to-do app",
-    concept: "Here's the before/after. Same JavaScript, just Bootstrap classes added to the HTML. This is the key insight: <strong>Bootstrap changes appearance, not behavior</strong>.",
+    title: "[OPTIONAL] Upgrading your to-do app",
+    concept: "Here's the before/after. Same JavaScript, just Bootstrap classes added to the HTML. This is the key insight: <strong>Bootstrap changes appearance, not behavior</strong>.<br><br><strong>Key insight:</strong> Same JavaScript, just Bootstrap classes added to the HTML. Bootstrap changes appearance, not behavior.",
     code: "// BEFORE (plain HTML):\nlet before = [\n  '<input id=\"taskInput\" />',\n  '<button id=\"addBtn\">Add</button>',\n  '<ul id=\"list\"></ul>'\n];\n\n// AFTER (with Bootstrap):\nlet after = [\n  '<div class=\"container mt-5\" style=\"max-width:500px\">',\n  '  <h2 class=\"mb-3\">To-Do List</h2>',\n  '  <div class=\"input-group mb-3\">',\n  '    <input class=\"form-control\" id=\"taskInput\" placeholder=\"Enter task...\">',\n  '    <button class=\"btn btn-success\" id=\"addBtn\">Add</button>',\n  '  </div>',\n  '  <ul class=\"list-group\" id=\"list\"></ul>',\n  '</div>'\n];\n\nconsole.log(\"BEFORE:\");\nbefore.forEach(l => console.log(\"  \" + l));\nconsole.log(\"\\nAFTER:\");\nafter.forEach(l => console.log(\"  \" + l));\n\nconsole.log(\"\\nJS code: UNCHANGED\");",
     lines: [
       ["container mt-5", "centers app, adds top margin"],
@@ -94,8 +94,8 @@ window.SLIDES = [
     tryit: "Apply the Bootstrap upgrade to your actual to-do app. The JS stays the same — only change the HTML classes."
   },
   {
-    title: "Rules for using Bootstrap",
-    concept: "Bootstrap is a <strong>styling shortcut</strong>, not a skill to master. Use it to save time after your JS works. Don't go down styling rabbit holes — keep focus on JavaScript.",
+    title: "[OPTIONAL] Rules for using Bootstrap",
+    concept: "Bootstrap is a <strong>styling shortcut</strong>, not a skill to master. Use it to save time after your JS works. Don't go down styling rabbit holes -- keep focus on JavaScript.",
     code: "// DO:\nlet goodHabits = [\n  \"Use it AFTER your JS logic works\",\n  \"Use a few key classes only\",\n  \"Use it to save time, not impress\",\n  \"Keep focus on JavaScript behavior\"\n];\n\n// DON'T:\nlet badHabits = [\n  \"Try to learn every Bootstrap class\",\n  \"Debug styling before fixing JS\",\n  \"Spend hours on pixel-perfect layout\",\n  \"Rely on it to understand CSS\"\n];\n\nconsole.log(\"DO:\");\ngoodHabits.forEach((h, i) => console.log(\"  \" + (i+1) + \". \" + h));\n\nconsole.log(\"\\nDON'T:\");\nbadHabits.forEach((h, i) => console.log(\"  \" + (i+1) + \". \" + h));\n\nconsole.log(\"\\nBootstrap = styling shortcut\");\nconsole.log(\"JavaScript = behavior (the real skill)\");",
     lines: [
       ["AFTER JS works", "get logic right first, then make it pretty"],

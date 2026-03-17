@@ -14,8 +14,8 @@
 window.LESSON_INFO = { num: "Lesson 7", name: "Scope & Closures", prev: "06-async-apis.html", next: "08-bootstrap.html" };
 window.SLIDES = [
   {
-    title: "Scope — where variables exist",
-    concept: "Scope determines where a variable can be used. Variables created inside a function are <strong>local</strong> — they don't exist outside. Variables outside functions are <strong>global</strong>.",
+    title: "[GOOD TO KNOW] Scope — where variables exist",
+    concept: "<strong>Mental model:</strong> Scope = where a variable can be used. Variables created inside a function are local — they don't exist outside.<br><br>Scope determines where a variable can be used. Variables created inside a function are <strong>local</strong> — they don't exist outside. Variables outside functions are <strong>global</strong>.",
     code: "let globalVar = \"I am global\";\n\nfunction test() {\n  let localVar = \"I am local\";\n  console.log(globalVar); // works\n  console.log(localVar);  // works\n}\n\ntest();\n\nconsole.log(globalVar); // works\n\ntry {\n  console.log(localVar); // error!\n} catch(e) {\n  console.log(\"Error:\", e.message);\n}",
     lines: [
       ["globalVar", "defined outside — accessible everywhere"],
@@ -27,8 +27,8 @@ window.SLIDES = [
     tryit: "Create a variable inside an <span class='cr'>if</span> block. Try to access it outside. What happens?"
   },
   {
-    title: "Block scope — let vs var",
-    concept: "<span class='cr'>let</span> and <span class='cr'>const</span> are <strong>block-scoped</strong> — they stay inside <span class='cr'>{ }</span>. The older <span class='cr'>var</span> ignores blocks and leaks out. Always use <span class='cr'>let</span>/<span class='cr'>const</span>.",
+    title: "[GOOD TO KNOW] Block scope — let vs var",
+    concept: "Always use let/const. Never use var — it leaks out of blocks and causes subtle bugs.<br><br><span class='cr'>let</span> and <span class='cr'>const</span> are <strong>block-scoped</strong> — they stay inside <span class='cr'>{ }</span>. The older <span class='cr'>var</span> ignores blocks and leaks out. Always use <span class='cr'>let</span>/<span class='cr'>const</span>.",
     code: "if (true) {\n  let x = 10;\n  var y = 20;\n}\n\ntry {\n  console.log(x);\n} catch(e) {\n  console.log(\"let x:\", e.message);\n}\n\nconsole.log(\"var y:\", y); // works! (leaked out)\n\nfor (let i = 0; i < 3; i++) {}\ntry {\n  console.log(i);\n} catch(e) {\n  console.log(\"let i:\", e.message);\n}",
     lines: [
       ["let x = 10", "block-scoped: only exists inside the if { }"],
@@ -40,8 +40,8 @@ window.SLIDES = [
     tryit: "Try using <span class='cr'>var</span> in a for loop, then access it outside. Compare with <span class='cr'>let</span>."
   },
   {
-    title: "Closures — functions remember things",
-    concept: "A <strong>closure</strong> is when a function keeps access to variables from where it was created, even after that outer function has finished running. This is one of the most powerful JS concepts.",
+    title: "[GOOD TO KNOW] Closures — functions remember things",
+    concept: "<strong>Mental model:</strong> A closure is when a function 'remembers' variables from where it was created, even after that outer function is done.<br><br>A <strong>closure</strong> is when a function keeps access to variables from where it was created, even after that outer function has finished running. This is one of the most powerful JS concepts.<br><br>This is a classic interview topic. Understanding closures shows deep JS knowledge.",
     code: "function outer() {\n  let count = 0;\n\n  return function inner() {\n    count++;\n    return count;\n  };\n}\n\nlet counter = outer();\n\nconsole.log(counter()); // 1\nconsole.log(counter()); // 2\nconsole.log(counter()); // 3\n\n// Each call creates a separate closure\nlet counter2 = outer();\nconsole.log(counter2()); // 1 (separate count!)",
     lines: [
       ["function outer()", "creates a scope with count = 0"],
@@ -54,8 +54,8 @@ window.SLIDES = [
     tryit: "Modify outer to accept a <strong>startValue</strong> parameter. Make one counter start at 10 and another at 100."
   },
   {
-    title: "Closures in practice",
-    concept: "Closures aren't just theory — they appear in event handlers, callbacks, and private data. Any time a function is created inside another function, it forms a closure.",
+    title: "[GOOD TO KNOW] Closures in practice",
+    concept: "Closures aren't just theory — they appear in event handlers, callbacks, and private data. Any time a function is created inside another function, it forms a closure.<br><br>Closures appear everywhere: event handlers, callbacks, private data. You've already been using them.",
     code: "function createGreeter(greeting) {\n  return function(name) {\n    return greeting + \", \" + name + \"!\";\n  };\n}\n\nlet sayHello = createGreeter(\"Hello\");\nlet sayHi = createGreeter(\"Hi\");\n\nconsole.log(sayHello(\"Alice\"));\nconsole.log(sayHello(\"Bob\"));\nconsole.log(sayHi(\"Carl\"));\n\n// Private counter pattern\nfunction createCounter(label) {\n  let n = 0;\n  return {\n    increment() { n++; console.log(label + \": \" + n); },\n    reset() { n = 0; console.log(label + \": reset\"); }\n  };\n}\n\nlet clicks = createCounter(\"clicks\");\nclicks.increment();\nclicks.increment();\nclicks.reset();",
     lines: [
       ["createGreeter(greeting)", "returns a function that remembers greeting"],
@@ -67,8 +67,8 @@ window.SLIDES = [
     tryit: "Add a <strong>getCount()</strong> method to the counter that returns the current value without incrementing."
   },
   {
-    title: "this — what object am I in?",
-    concept: "Inside an object method, <span class='cr'>this</span> refers to the object that called the method. It's how methods access their own data.",
+    title: "[MUST KNOW] this — what object am I in?",
+    concept: "<strong>Mental model:</strong> Inside an object method, <span class='cr'>this</span> refers to the object that called the method. It's how methods access their own data.<br><br><strong>Interview tip:</strong> 'this' is one of the most common interview questions. Know that it depends on HOW a function is called, not where it's defined.<div style=\"margin-top:8px;padding:6px 10px;background:rgba(248,113,113,0.08);border-left:3px solid var(--color-red);border-radius:4px;font-size:12px\"><strong>Common mistake:</strong> Assuming this always refers to the same thing. this changes depending on how the function is called.</div>",
     code: "let person = {\n  name: \"Alice\",\n  age: 23,\n  greet() {\n    console.log(\"Hi, I'm \" + this.name);\n    console.log(\"Age: \" + this.age);\n  }\n};\n\nperson.greet();\n\nlet car = {\n  brand: \"Toyota\",\n  describe() {\n    return \"This is a \" + this.brand;\n  }\n};\n\nconsole.log(car.describe());",
     lines: [
       ["this.name", "inside person.greet(), this = person"],
@@ -80,8 +80,8 @@ window.SLIDES = [
     tryit: "Create a <strong>calculator</strong> object with a value property and add/subtract methods that use <span class='cr'>this.value</span>."
   },
   {
-    title: "Arrow functions and this (gotcha!)",
-    concept: "Arrow functions do <strong>NOT</strong> have their own <span class='cr'>this</span>. They inherit it from the surrounding scope. Use regular functions for object methods.",
+    title: "[MUST KNOW] Arrow functions and this (gotcha!)",
+    concept: "<strong>Key rule:</strong> Arrow functions do NOT have their own this. They inherit it from the surrounding scope. Use regular functions for object methods, arrows for callbacks inside methods.<br><br>Arrow functions do <strong>NOT</strong> have their own <span class='cr'>this</span>. They inherit it from the surrounding scope. Use regular functions for object methods.<div style=\"margin-top:8px;padding:6px 10px;background:rgba(248,113,113,0.08);border-left:3px solid var(--color-red);border-radius:4px;font-size:12px\"><strong>Common mistake:</strong> Using arrow functions as object methods — this won't refer to the object.</div>",
     code: "let person = {\n  name: \"Alice\",\n  // Regular function — this works\n  greetRegular() {\n    console.log(\"Regular:\", this.name);\n  },\n  // Arrow function — this breaks\n  greetArrow: () => {\n    console.log(\"Arrow:\", typeof this.name);\n  }\n};\n\nperson.greetRegular();\nperson.greetArrow();\n\n// But arrows ARE useful inside methods:\nlet team = {\n  members: [\"Alice\", \"Bob\"],\n  show() {\n    // Arrow inherits 'this' from show()\n    this.members.forEach(m => {\n      console.log(m + \" is on the team\");\n    });\n  }\n};\n\nteam.show();",
     lines: [
       ["greetRegular()", "regular function: this = person (correct)"],
@@ -93,8 +93,8 @@ window.SLIDES = [
     tryit: "Try assigning a regular method to a variable and calling it. What happens to <span class='cr'>this</span>?"
   },
   {
-    title: "Putting it together — factory functions",
-    concept: "Combine scope, closures, and this to create clean, reusable code. Factory functions use closures to create objects with private state — a very common professional pattern.",
+    title: "[ADVANCED] Putting it together — factory functions",
+    concept: "Factory functions use closures to create objects with private state. This is a professional pattern you'll see in real codebases.<br><br>Combine scope, closures, and this to create clean, reusable code. Factory functions use closures to create objects with private state — a very common professional pattern.",
     code: "function createUser(name, age) {\n  // Private — not accessible from outside\n  let loginCount = 0;\n\n  return {\n    name,\n    age,\n    login() {\n      loginCount++;\n      console.log(this.name + \" logged in (\" + loginCount + \" times)\");\n    },\n    getStats() {\n      return { user: this.name, logins: loginCount };\n    }\n  };\n}\n\nlet alice = createUser(\"Alice\", 23);\nlet bob = createUser(\"Bob\", 17);\n\nalice.login();\nalice.login();\nbob.login();\n\nconsole.log(alice.getStats());\nconsole.log(bob.getStats());",
     lines: [
       ["let loginCount = 0", "private variable — closure keeps it alive"],

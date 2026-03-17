@@ -14,8 +14,8 @@
 window.LESSON_INFO = { num: "Lesson 4", name: "How Apps Work", prev: "03-dom.html", next: "05-events-forms.html" };
 window.SLIDES = [
   {
-    title: "The big picture — apps wait and react",
-    concept: "A web app is <strong>NOT</strong> a script that runs once. It's a system that <strong>waits and reacts</strong>. Your code sets up listeners, then sits idle until the user does something.",
+    title: "[MUST KNOW] The big picture — apps wait and react",
+    concept: "<strong>Mental model:</strong> A web app is NOT a script that runs once. It's a system that waits for user actions and reacts to them.<br><br>A web app is <strong>NOT</strong> a script that runs once. It's a system that <strong>waits and reacts</strong>. Your code sets up listeners, then sits idle until the user does something.",
     code: "// WRONG mental model — runs once and done:\nconsole.log(\"This runs once\");\n\n// RIGHT mental model — waits for user:\nlet clickCount = 0;\n\nfunction handleClick() {\n  clickCount++;\n  console.log(\"Clicked \" + clickCount + \" times\");\n}\n\n// Simulate user clicking 3 times\nhandleClick();\nhandleClick();\nhandleClick();\n\nconsole.log(\"App is still alive, waiting for more...\");",
     lines: [
       ["runs once", "traditional scripts just execute and exit"],
@@ -27,8 +27,8 @@ window.SLIDES = [
     tryit: "Add a <strong>handleReset()</strong> function that sets clickCount back to 0. Call it after the 3 clicks, then click again."
   },
   {
-    title: "The 5-part model of every web app",
-    concept: "Every web app follows this pattern: <strong>1) HTML exists</strong>, <strong>2) JS connects to it</strong>, <strong>3) waits for events</strong>, <strong>4) updates data</strong>, <strong>5) updates UI</strong>. This is the universal flow.",
+    title: "[MUST KNOW] The 5-part model of every web app",
+    concept: "This is the universal pattern. Every web app you'll ever build follows these same 5 steps.<br><br>Every web app follows this pattern: <strong>1) HTML exists</strong>, <strong>2) JS connects to it</strong>, <strong>3) waits for events</strong>, <strong>4) updates data</strong>, <strong>5) updates UI</strong>. This is the universal flow.<br><br><strong>Interview tip:</strong> If asked 'how does a web app work?', walk through these 5 steps.",
     code: "// Simulating the 5-part model:\n\n// 1. HTML exists (structure)\nlet page = { button: \"Click me\", display: \"0\" };\nconsole.log(\"1. Page loaded:\", page.display);\n\n// 2. JS connects to DOM\nlet count = 0; // our state\nconsole.log(\"2. JS connected, count =\", count);\n\n// 3. Wait for event (simulated clicks)\nfunction onClick() {\n  // 4. Update data (state)\n  count++;\n  console.log(\"4. State updated: count =\", count);\n\n  // 5. Update UI\n  page.display = String(count);\n  console.log(\"5. UI updated:\", page.display);\n}\n\nconsole.log(\"3. Waiting for events...\");\nonClick();\nonClick();",
     lines: [
       ["page = {...}", "step 1: HTML provides structure"],
@@ -41,8 +41,8 @@ window.SLIDES = [
     tryit: "Add a <strong>decrement button</strong> handler. Make sure count never goes below 0."
   },
   {
-    title: "Event → Logic → UI",
-    concept: "The simplified mental model: <strong>Event</strong> (user does something) → <strong>Logic</strong> (code processes it) → <strong>UI</strong> (page updates). Every feature you build follows this exact flow.",
+    title: "[MUST KNOW] Event → Logic → UI",
+    concept: "<strong>Mental model:</strong> Every feature follows this flow: something happens (Event), code processes it (Logic), page updates (UI).<br><br>This is the single most important pattern in frontend development.<br><br>The simplified mental model: <strong>Event</strong> (user does something) → <strong>Logic</strong> (code processes it) → <strong>UI</strong> (page updates). Every feature you build follows this exact flow.",
     code: "// A complete counter following Event → Logic → UI\n\nlet state = { count: 0 };\nlet ui = { text: \"Count: 0\" };\n\nfunction render() {\n  ui.text = \"Count: \" + state.count;\n  console.log(\"[UI]\", ui.text);\n}\n\nfunction increment() {\n  console.log(\"[Event] increment clicked\");\n  state.count++;           // Logic\n  render();                // UI\n}\n\nfunction decrement() {\n  console.log(\"[Event] decrement clicked\");\n  if (state.count > 0) state.count--;  // Logic\n  render();                             // UI\n}\n\nincrement();\nincrement();\nincrement();\ndecrement();",
     lines: [
       ["[Event]", "something happened — user clicked"],
@@ -54,8 +54,8 @@ window.SLIDES = [
     tryit: "Add a <strong>reset()</strong> function. Then add a <strong>double()</strong> that multiplies count by 2."
   },
   {
-    title: "What is state?",
-    concept: "<strong>State</strong> = the data your app is currently using. It connects user actions to what they see. When state changes, the UI should update to match.",
+    title: "[MUST KNOW] What is state?",
+    concept: "<strong>Mental model:</strong> State = the data your app is currently using. It's the 'memory' of your app. When state changes, the UI should update to match.<br><br><strong>State</strong> = the data your app is currently using. It connects user actions to what they see. When state changes, the UI should update to match.",
     code: "// State is just data that changes over time\nlet appState = {\n  todos: [],\n  filter: \"all\" // \"all\", \"active\", \"done\"\n};\n\n// Actions update state\nfunction addTodo(text) {\n  appState.todos.push({ text, done: false });\n}\n\nfunction toggleTodo(index) {\n  appState.todos[index].done = !appState.todos[index].done;\n}\n\n// UI reads from state\nfunction getVisible() {\n  if (appState.filter === \"active\")\n    return appState.todos.filter(t => !t.done);\n  if (appState.filter === \"done\")\n    return appState.todos.filter(t => t.done);\n  return appState.todos;\n}\n\naddTodo(\"Buy groceries\");\naddTodo(\"Walk the dog\");\ntoggleTodo(0);\n\nappState.filter = \"active\";\nconsole.log(\"Active:\", getVisible().map(t => t.text));\n\nappState.filter = \"done\";\nconsole.log(\"Done:\", getVisible().map(t => t.text));\n\nappState.filter = \"all\";\nconsole.log(\"All:\", getVisible().map(t => t.text + (t.done ? \" ✓\" : \"\")));",
     lines: [
       ["appState", "all app data lives in one place"],
@@ -68,8 +68,8 @@ window.SLIDES = [
     tryit: "Add a <strong>setFilter(f)</strong> function and a <strong>removeTodo(index)</strong> function."
   },
   {
-    title: "Debugging the flow",
-    concept: "When something breaks, check each step of the flow: <strong>1) Did the event fire?</strong> <strong>2) Did the data update?</strong> <strong>3) Did the UI update?</strong> The bug is always in one of these steps.",
+    title: "[MUST KNOW] Debugging the flow",
+    concept: "When something breaks, check each step: did the event fire? Did the data update? Did the UI update? The bug is always in one of these steps.<br><br>When something breaks, check each step of the flow: <strong>1) Did the event fire?</strong> <strong>2) Did the data update?</strong> <strong>3) Did the UI update?</strong> The bug is always in one of these steps.<div style=\"margin-top:8px;padding:6px 10px;background:rgba(248,113,113,0.08);border-left:3px solid var(--color-red);border-radius:4px;font-size:12px\"><strong>Common mistake:</strong> Changing state but forgetting to update the UI — the most common app bug.</div>",
     code: "let state = { count: 0 };\n\nfunction buggyIncrement() {\n  // Step 1: Did the event fire?\n  console.log(\"1. Event fired\");\n\n  // Step 2: Did the data update?\n  state.count++;\n  console.log(\"2. State:\", state.count);\n\n  // Step 3: Did the UI update?\n  // BUG: forgot to update UI!\n  // console.log(\"3. UI updated\");\n}\n\nfunction fixedIncrement() {\n  console.log(\"1. Event fired\");\n  state.count++;\n  console.log(\"2. State:\", state.count);\n  let display = \"Count: \" + state.count;\n  console.log(\"3. UI:\", display);\n}\n\nconsole.log(\"--- Buggy version ---\");\nbuggyIncrement();\n\nconsole.log(\"--- Fixed version ---\");\nfixedIncrement();",
     lines: [
       ["console.log(\"1. Event fired\")", "confirm the handler is running"],
@@ -81,8 +81,8 @@ window.SLIDES = [
     tryit: "Create a function with a <strong>different bug</strong> (e.g., event fires but state doesn't update). Debug it step by step."
   },
   {
-    title: "The full picture — preview of everything ahead",
-    concept: "Now you have the mental model. Everything from Day 4 onward fills in this framework: <strong>Events+Forms</strong> (richer events), <strong>APIs</strong> (external data), <strong>Scope+Closures</strong> (how JS manages memory). You already understand the system.",
+    title: "The full picture — State, Actions, Render",
+    concept: "This is the complete app pattern you'll use for everything. State holds data, Actions modify state, Render syncs UI with state.<br><br>Now you have the mental model. Everything from Day 4 onward fills in this framework: <strong>Events+Forms</strong> (richer events), <strong>APIs</strong> (external data), <strong>Scope+Closures</strong> (how JS manages memory). You already understand the system.",
     code: "// The complete app pattern you'll use for everything:\n\n// STATE\nlet state = { items: [], input: \"\" };\n\n// ACTIONS (update state)\nfunction addItem(text) {\n  if (!text.trim()) return;\n  state.items.push(text);\n  state.input = \"\";\n}\n\nfunction removeItem(index) {\n  state.items.splice(index, 1);\n}\n\n// RENDER (state → UI)\nfunction render() {\n  if (state.items.length === 0) {\n    console.log(\"[UI] No items yet\");\n  } else {\n    state.items.forEach((item, i) => {\n      console.log(\"[UI] \" + i + \": \" + item);\n    });\n  }\n  console.log(\"---\");\n}\n\n// SIMULATE USER FLOW\nrender();\naddItem(\"Learn JavaScript\");\nrender();\naddItem(\"Build a project\");\naddItem(\"Ship it\");\nrender();\nremoveItem(1);\nrender();",
     lines: [
       ["state", "all data in one place"],

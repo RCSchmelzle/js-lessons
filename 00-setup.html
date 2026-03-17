@@ -14,8 +14,8 @@
 window.LESSON_INFO = { num: "Setup Guide", name: "Local Development Setup", prev: null, next: "01-foundations.html" };
 window.SLIDES = [
   {
-    title: "Install VS Code & Chrome",
-    concept: "<em>This lesson is only needed if you want to run code on your own computer. If you're just learning concepts, skip to Lesson 1.</em><br><br>You need two tools: <strong>VS Code</strong> (code editor) and <strong>Google Chrome</strong> (browser with developer tools). Download both, drag to Applications, and open them.",
+    title: "[OPTIONAL] Install VS Code & Chrome",
+    concept: "<strong>Mental model:</strong> You write JavaScript in an editor, the browser runs it, you see the results. That's the whole workflow.<br><br><em>This lesson is only needed if you want to run code on your own computer. If you're just learning concepts, skip to Lesson 1.</em><br><br>You need two tools: <strong>VS Code</strong> (code editor) and <strong>Google Chrome</strong> (browser with developer tools). Download both, drag to Applications, and open them.",
     code: "// Nothing to run yet!\n// This step is about getting your tools ready.\n\n// After installing, open VS Code and you should see\n// a welcome screen. That means it's working.\n\nconsole.log(\"If you can see this, your scratchpad works!\");",
     lines: [
       ["VS Code", "your code editor — where you write all your code"],
@@ -27,7 +27,7 @@ window.SLIDES = [
     tryit: "Click <strong>Run</strong> above. If you see the output, you're ready to go. Try changing the message and running again."
   },
   {
-    title: "Create a project folder",
+    title: "[OPTIONAL] Create a project folder",
     concept: "Open VS Code, click <strong>Open Folder</strong>, and create a new folder called <span class='cr'>js-crash-course</span>. This is your workspace. All files go here.",
     code: "// Your folder structure will look like this:\n//\n// js-crash-course/\n//   index.html\n//   script.js\n//   style.css\n\n// Create these files by right-clicking\n// the sidebar in VS Code → \"New File\"\n\nconsole.log(\"3 files: index.html, script.js, style.css\");",
     lines: [
@@ -40,7 +40,7 @@ window.SLIDES = [
     tryit: "Create the folder and 3 files in VS Code. Don't worry about contents yet — that's the next step."
   },
   {
-    title: "Basic HTML setup",
+    title: "[OPTIONAL] Basic HTML setup",
     concept: "Your <span class='cr'>index.html</span> is the starting point. The <span class='cr'>&lt;script src=\"script.js\"&gt;</span> tag at the bottom connects your JavaScript file. It must go <strong>before the closing <span class='cr'>&lt;/body&gt;</span></strong> so the HTML loads first.",
     code: "// Paste this into your index.html:\n//\n// <!DOCTYPE html>\n// <html>\n// <head>\n//   <title>JS Practice</title>\n// </head>\n// <body>\n//   <h1>Hello</h1>\n//   <button id=\"btn\">Click me</button>\n//   <script src=\"script.js\"><\\/script>\n// </body>\n// </html>\n\n// Then in script.js:\nconsole.log(\"JS is working\");\n\n// The script tag MUST be at the bottom\n// so HTML elements exist before JS runs",
     lines: [
@@ -53,7 +53,7 @@ window.SLIDES = [
     tryit: "Paste the HTML into your index.html. Put <span class='cr'>console.log(\"JS is working\")</span> in script.js. Save both files (<strong>Cmd+S</strong>)."
   },
   {
-    title: "Run it with Live Server",
+    title: "[OPTIONAL] Run it with Live Server",
     concept: "<strong>Live Server</strong> is a VS Code extension that auto-refreshes your page when you save. Install it from the Extensions sidebar (search \"Live Server\"). Then right-click <span class='cr'>index.html</span> → <strong>Open with Live Server</strong>.",
     code: "// After Live Server opens your page in Chrome:\n\n// 1. Open DevTools:\n//    Mac:  Cmd + Option + J\n//    Win:  Ctrl + Shift + J\n//\n// 2. You should see in the Console tab:\nconsole.log(\"JS is working\");\n\n// 3. If you see it — you're set up!\n// 4. If not — check:\n//    - Did you save? (Cmd+S)\n//    - Is script.js linked in index.html?\n//    - Is Live Server running?",
     lines: [
@@ -66,7 +66,7 @@ window.SLIDES = [
     tryit: "Open your page with Live Server. Open the Console. You should see <strong>\"JS is working\"</strong>. If so, you're ready."
   },
   {
-    title: "Test the button",
+    title: "[OPTIONAL] Test the button",
     concept: "Add a click handler in <span class='cr'>script.js</span> to make sure everything is connected. If clicking the button logs to the console, your setup is <strong>100% working</strong>.",
     code: "// Put this in your script.js:\n\nconsole.log(\"JS is working\");\n\nconst btn = document.querySelector(\"#btn\");\n\nbtn.addEventListener(\"click\", () => {\n  console.log(\"clicked!\");\n});\n\n// Save, click the button, check the console",
     lines: [
@@ -79,7 +79,7 @@ window.SLIDES = [
     tryit: "If you see both messages in your console, you're <strong>fully set up</strong> and ready for Day 1."
   },
   {
-    title: "Mac tips & common issues",
+    title: "[OPTIONAL] Mac tips & common issues",
     concept: "A few things that trip people up on Mac. File names are <strong>case-sensitive</strong> (<span class='cr'>script.js</span> is not <span class='cr'>Script.js</span>). Always save with <strong>Cmd+S</strong>. If nothing works, check the Console for red error messages.",
     code: "// Common issue: \"nothing happens\"\n// Fix: Did you save? (Cmd+S)\n\n// Common issue: button doesn't work\n// Fix: check if the element exists:\nlet btn = document.querySelector(\"#btn\");\nconsole.log(\"Button found:\", btn !== null);\n\n// Common issue: console is empty\n// Fix: make sure you're on the Console tab\n//       in DevTools (Cmd+Option+J)\n\n// Useful Mac shortcuts:\n// Save:       Cmd + S\n// New file:   Cmd + N\n// Search:     Cmd + F\n// DevTools:   Cmd + Option + J\n\nconsole.log(\"Setup complete!\");",
     lines: [
@@ -92,8 +92,8 @@ window.SLIDES = [
     tryit: "Run through the <strong>final checklist</strong>: VS Code installed, Chrome installed, folder open, files created, Live Server running, console.log works, button click logs."
   },
   {
-    title: "Optional: Install Node.js",
-    concept: "Node.js lets you run JavaScript outside the browser — in the terminal. You don't need it for the first few days, but it's useful later. Download from the Node.js website, run the installer, then test in Terminal.",
+    title: "[OPTIONAL] Install Node.js",
+    concept: "Node.js lets you run JavaScript outside the browser — in the terminal. You don't need it for the first few days, but it's useful later. Download from the Node.js website, run the installer, then test in Terminal.<br><br>Node.js is optional for this course. We mainly use JavaScript in the browser.",
     code: "// After installing Node.js, open Terminal:\n//   Mac: Cmd+Space → type \"Terminal\"\n//\n// Then run:\n//   node -v\n//   npm -v\n//\n// If it prints version numbers, it works!\n\n// You can also run JS directly:\n//   node\n//   > console.log(\"hello\")\n//   hello\n\n// For now, we'll use the browser.\n// Node becomes useful for APIs and tooling.\n\nconsole.log(\"Node.js is optional for now\");",
     lines: [
       ["node -v", "check if Node.js is installed and which version"],

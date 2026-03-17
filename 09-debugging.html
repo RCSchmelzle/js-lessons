@@ -14,8 +14,8 @@
 window.LESSON_INFO = { num: "Lesson 9", name: "Debugging", prev: "08-bootstrap.html", next: null };
 window.SLIDES = [
   {
-    title: "The debugging mindset",
-    concept: "When something breaks, don't think <em>\"I don't understand JavaScript\"</em>. Think: <strong>\"One step in my program is not doing what I expect.\"</strong> Your job is to find which step is wrong.",
+    title: "[MUST KNOW] The debugging mindset",
+    concept: "<strong>Mental model:</strong> When something breaks, don't think 'I don't understand JavaScript.' Think: 'One step in my program is not doing what I expect.' Your job is to find which step.<br><br>When something breaks, don't think <em>\"I don't understand JavaScript\"</em>. Think: <strong>\"One step in my program is not doing what I expect.\"</strong> Your job is to find which step is wrong.",
     code: `// This code has a bug. Can you find it?\nlet items = ["apple", "banana", "cherry"];\n\n// Goal: print each item in uppercase\nfor (let i = 0; i <= items.length; i++) {\n  console.log(items[i].toUpperCase());\n}`,
     lines: [
       ["i <= items.length", "BUG: should be < not <= (off by one)"],
@@ -27,8 +27,8 @@ window.SLIDES = [
     tryit: "Fix the bug (change <span class='cr'>&lt;=</span> to <span class='cr'>&lt;</span>) and run again. Then add a <strong>console.log(i)</strong> inside the loop to see the index at each step."
   },
   {
-    title: "Step 1 — Did the code run?",
-    concept: "The first thing to check: <strong>did the code even execute?</strong> Add a <span class='cr'>console.log</span> at the top. If you don't see it, the code never ran — check your script connection or event listener.",
+    title: "[MUST KNOW] Step 1 — Did the code run?",
+    concept: "The first thing to check. If you don't see your console.log, the code never executed — check your script connection or event listener.<br><br>The first thing to check: <strong>did the code even execute?</strong> Add a <span class='cr'>console.log</span> at the top. If you don't see it, the code never ran — check your script connection or event listener.",
     code: `// Scenario: button click handler doesn't seem to work\n\nfunction handleClick() {\n  console.log("1. Handler called"); // Step 1: did it run?\n  \n  let value = "test";\n  console.log("2. Value:", value);   // Step 2: what value?\n  \n  // ... rest of logic\n  console.log("3. Done");            // Step 3: did it finish?\n}\n\n// Simulate calling it\nhandleClick();\n\n// If you DON'T see "1. Handler called",\n// the function never ran. Check your addEventListener.`,
     lines: [
       ["console.log(\"1. Handler called\")", "first checkpoint — confirms code is running"],
@@ -40,8 +40,8 @@ window.SLIDES = [
     tryit: "Comment out the handleClick() call at the bottom. Run it. Notice: no output. That's what happens when code doesn't run."
   },
   {
-    title: "Step 2 — What values do I have?",
-    concept: "If the code runs but produces wrong results, <strong>log your variables</strong>. The bug is usually a value that isn't what you expected.",
+    title: "[MUST KNOW] Step 2 — What values do I have?",
+    concept: "If the code runs but gives wrong results, log your variables. The bug is usually a value that isn't what you expected.<br><br>If the code runs but produces wrong results, <strong>log your variables</strong>. The bug is usually a value that isn't what you expected.",
     code: `// Bug: total should be 60 but it's NaN\nlet prices = [10, 20, "thirty"];\nlet total = 0;\n\nfor (let price of prices) {\n  console.log("Adding:", price, "| type:", typeof price);\n  total += price;\n  console.log("Running total:", total);\n}\n\nconsole.log("Final total:", total);`,
     lines: [
       ["typeof price", "reveals that \"thirty\" is a string, not a number"],
@@ -53,8 +53,8 @@ window.SLIDES = [
     tryit: "Fix the bug: add a check <span class='cr'>if (typeof price === \"number\")</span> before adding. Or convert with <span class='cr'>Number(price)</span>."
   },
   {
-    title: "Step 3 — Where does it break?",
-    concept: "Add logs <strong>between each step</strong> of your code. The bug is between the last log you see and the first one you don't.",
+    title: "[MUST KNOW] Step 3 — Where does it break?",
+    concept: "Add logs between each step. The bug is between the last log you see and the first one you don't.<br><br>Add logs <strong>between each step</strong> of your code. The bug is between the last log you see and the first one you don't.",
     code: `// Bug: we expect 3 results but get 0\nlet users = [\n  { name: "Alice", age: 23 },\n  { name: "Bob", age: 17 },\n  { name: "Carl", age: 30 }\n];\n\nconsole.log("Step 1: users loaded", users.length);\n\nlet adults = users.filter(u => {\n  console.log("  Checking:", u.name, "age:", u.age, ">=18?", u.age >= 18);\n  return u.age > 18;  // BUG: should be >= 18\n});\n\nconsole.log("Step 2: adults found:", adults.length);\nconsole.log("Step 3: names:", adults.map(u => u.name));`,
     lines: [
       ["Step 1", "confirms data is loaded correctly"],
@@ -66,8 +66,8 @@ window.SLIDES = [
     tryit: "Change Bob's age to 18. Notice he's excluded with <span class='cr'>&gt; 18</span> but included with <span class='cr'>&gt;= 18</span>. The log makes this obvious."
   },
   {
-    title: "Common bugs and fixes",
-    concept: "Most beginner bugs fall into a few categories. Learn to recognize the <strong>error message patterns</strong> and you'll fix them in seconds.",
+    title: "[MUST KNOW] Common bugs and fixes",
+    concept: "Most beginner bugs fall into a few categories. Learn to recognize the error message patterns and you'll fix them in seconds.<br><br>Most beginner bugs fall into a few categories. Learn to recognize the <strong>error message patterns</strong> and you'll fix them in seconds.",
     code: `// Bug 1: "Cannot read properties of null"\nlet btn = null; // simulates querySelector not finding element\ntry {\n  btn.addEventListener("click", () => {});\n} catch(e) {\n  console.log("Bug 1:", e.message);\n  console.log("Fix: check your selector — element not found\\n");\n}\n\n// Bug 2: "is not a function"\nlet data = { name: "Alice" };\ntry {\n  data.toUppercase();\n} catch(e) {\n  console.log("Bug 2:", e.message);\n  console.log("Fix: check spelling — it's toUpperCase()\\n");\n}\n\n// Bug 3: "is not defined"\ntry {\n  console.log(userName);\n} catch(e) {\n  console.log("Bug 3:", e.message);\n  console.log("Fix: variable doesn't exist — typo or wrong scope");\n}`,
     lines: [
       ["Cannot read properties of null", "querySelector returned null — wrong ID/selector"],
@@ -79,8 +79,8 @@ window.SLIDES = [
     tryit: "For each bug, write the <strong>fixed version</strong> and verify it works."
   },
   {
-    title: "Trace the Event-Logic-UI flow",
-    concept: "Every app bug is in one of three places: <strong>the event didn't fire</strong>, <strong>the logic is wrong</strong>, or <strong>the UI didn't update</strong>. Add a log at each stage to find which one broke.",
+    title: "[MUST KNOW] Trace the Event-Logic-UI flow",
+    concept: "Every app bug is in one of three places: the event didn't fire, the logic is wrong, or the UI didn't update.<br><br>Every app bug is in one of three places: <strong>the event didn't fire</strong>, <strong>the logic is wrong</strong>, or <strong>the UI didn't update</strong>. Add a log at each stage to find which one broke.",
     code: `// Simulated app with a bug\nlet state = { count: 0 };\nlet ui = { text: "" };\n\nfunction onClick() {\n  console.log("[EVENT] click fired");\n  \n  state.count++;\n  console.log("[LOGIC] count is now:", state.count);\n  \n  // BUG: updating wrong property\n  ui.label = "Count: " + state.count;  // should be ui.text\n  console.log("[UI] ui.text is:", ui.text);\n  console.log("[UI] ui.label is:", ui.label);\n}\n\nonClick();\nonClick();\n\nconsole.log("\\nFinal state:", state.count);\nconsole.log("Final UI text:", ui.text || "(empty — bug!)");\nconsole.log("Final UI label:", ui.label);`,
     lines: [
       ["[EVENT]", "confirms the handler ran"],
@@ -92,8 +92,8 @@ window.SLIDES = [
     tryit: "Fix the bug (change <span class='cr'>ui.label</span> to <span class='cr'>ui.text</span>). Then verify all three checkpoints show correct values."
   },
   {
-    title: "The golden rule + checklist",
-    concept: "<strong>If you don't know what your code is doing, add a console.log.</strong> Debugging is not failure — it's the process of understanding your program. Every bug you fix makes you better.",
+    title: "[MUST KNOW] The golden rule + checklist",
+    concept: "<strong>The golden rule:</strong> If you don't know what your code is doing, add a console.log.<br><br><strong>Debugging checklist:</strong><ol style='margin:6px 0 0 16px;font-size:13px'><li>Check console for errors</li><li>Add console.log before and after code</li><li>Check if element exists</li><li>Check if event is firing</li><li>Simplify the problem</li></ol><br>Debugging is not failure — it's the process of understanding your program.",
     code: `// The debugging checklist:\nlet checklist = [\n  "1. Did the code run? (add console.log at top)",\n  "2. What values do I have? (log variables)",\n  "3. Where does it break? (log between steps)",\n  "4. What does the error say? (read the message)",\n  "5. Did I save the file? (Cmd+S / Ctrl+S)",\n  "6. Did I refresh? (or is Live Server running?)",\n  "7. Am I looking at the Console tab?"\n];\n\nconsole.log("DEBUGGING CHECKLIST");\nconsole.log("===================");\nchecklist.forEach(item => console.log(item));\n\nconsole.log("\\nCommon quick fixes:");\nconsole.log("- Typo in variable/function name");\nconsole.log("- Forgot 'await' before fetch");\nconsole.log("- Wrong selector (#id vs .class)");\nconsole.log("- Script loaded before HTML (move to bottom)");\nconsole.log("- Off-by-one in loop (< vs <=)");`,
     lines: [
       ["did the code run", "first thing to verify — always"],
